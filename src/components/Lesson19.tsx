@@ -273,7 +273,7 @@ const App: React.FC = () => {
 
     return (
       <div className="space-y-8 animate-in slide-in-from-right-4 duration-300">
-        <div className="flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur py-2 z-10 border-b mb-4">
+        <div className="flex justify-between items-center  top-0 bg-white/80 backdrop-blur py-2 z-10 border-b mb-4">
           <h3 className="text-xl font-bold text-slate-800">Assessment Tools</h3>
           <div className="px-4 py-1 bg-green-100 text-green-700 rounded-full font-bold">
             Score: {score}

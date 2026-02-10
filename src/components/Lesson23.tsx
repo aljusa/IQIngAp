@@ -276,7 +276,7 @@ const App = () => {
     <div className="min-h-screen bg-slate-100 p-4 md:p-8 font-sans text-slate-900">
       <div className="max-w-4xl mx-auto">
         {/* Navigation Tabs */}
-        <nav className="flex flex-wrap gap-1 bg-white p-2 rounded-t-2xl border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+        <nav className="flex flex-wrap gap-1 bg-white p-2 rounded-t-2xl border-b border-slate-200  top-0 z-10 shadow-sm">
           {tabs.map((tab) => (
             <button
               key={tab.id}

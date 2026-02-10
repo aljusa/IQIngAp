@@ -270,7 +270,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       {/* Navigation Header */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm overflow-x-auto scrollbar-hide">
+      <nav className="bg-white border-b border-slate-200  top-0 z-10 shadow-sm overflow-x-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex space-x-2 py-4 whitespace-nowrap">
             {tabs.map((tab) => (

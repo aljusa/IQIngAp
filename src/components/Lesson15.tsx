@@ -421,7 +421,7 @@ export default function App() {
         </div>
 
         {/* Tab Navigation - Scrollable on mobile */}
-        <div className="flex items-center overflow-x-auto pb-2 scrollbar-hide border-b border-slate-200 dark:border-slate-800 mb-8 sticky top-0 bg-slate-50 dark:bg-slate-950 z-50">
+        <div className="flex items-center overflow-x-auto pb-2 scrollbar-hide border-b border-slate-200 dark:border-slate-800 mb-8  top-0 bg-slate-50 dark:bg-slate-950 z-50">
           <div className="flex space-x-1">
             {sections.map((section) => {
               const Icon = section.icon;

@@ -74,7 +74,7 @@ const App: React.FC = () => {
       <Header />
 
       {/* Navigation Tabs */}
-      <nav className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
+      <nav className=" top-0 z-10 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
         <div className="max-w-6xl mx-auto flex">
           {tabs.map((tab) => (
             <button

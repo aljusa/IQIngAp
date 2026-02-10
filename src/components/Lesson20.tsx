@@ -348,7 +348,7 @@ export default function App() {
       </header>
 
       {/* Navigation Tabs */}
-      <nav className="max-w-6xl mx-auto px-4 mb-8 sticky top-0 z-50 bg-slate-50/90 backdrop-blur pb-2">
+      <nav className="max-w-6xl mx-auto px-4 mb-8  top-0 z-50 bg-slate-50/90 backdrop-blur pb-2">
         <div className="flex overflow-x-auto no-scrollbar gap-2 border-b border-slate-200">
           {tabs.map((tab, idx) => {
             const Icon = tab.icon;

@@ -461,7 +461,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans">
       {/* Top Header & Tabs */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-50">
+      <header className="bg-white border-b border-stone-200  top-0 z-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4">
             <div className="flex items-center gap-3">

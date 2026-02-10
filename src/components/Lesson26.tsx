@@ -70,7 +70,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8 font-sans transition-colors duration-300">
       {/* Navigation Tabs */}
       <div className="max-w-6xl mx-auto mb-8">
-        <div className="flex flex-wrap justify-center gap-2 p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-xl backdrop-blur-md sticky top-4 z-50">
+        <div className="flex flex-wrap justify-center gap-2 p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-xl backdrop-blur-md  top-4 z-50">
           {tabs.map((tab) => (
             <button
               key={tab.id}

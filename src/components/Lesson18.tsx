@@ -39,7 +39,7 @@ export default function App() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
+      <div className=" top-0 z-10 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
         <div className="max-w-5xl mx-auto flex">
           {tabs.map((tab) => (
             <button

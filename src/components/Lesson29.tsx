@@ -537,7 +537,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Tab Navigation */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <div className="bg-white border-b shadow-sm  top-0 z-10">
         <div className="max-w-5xl mx-auto overflow-x-auto no-scrollbar">
           <div className="flex w-max md:w-full">
             {tabs.map((tab) => (

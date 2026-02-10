@@ -307,7 +307,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       {/* Navigation Bar */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-10 overflow-x-auto no-scrollbar">
+      <nav className="bg-white border-b border-slate-200  top-0 z-10 overflow-x-auto no-scrollbar">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex space-x-1 py-1 overflow-x-auto min-w-max">
             {tabs.map((tab) => {

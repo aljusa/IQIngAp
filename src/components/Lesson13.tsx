@@ -400,7 +400,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 pb-12">
       {/* Header Tabs */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
+      <nav className=" top-0 z-50 bg-white border-b border-slate-200 shadow-sm overflow-x-auto">
         <div className="max-w-6xl mx-auto flex">
           {tabs.map((tab) => (
             <button

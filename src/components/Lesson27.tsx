@@ -55,7 +55,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-100">
       {/* Header */}
-      <header className="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+      <header className="bg-slate-900 text-white shadow-lg  top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
