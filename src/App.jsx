@@ -11,6 +11,8 @@ import Lesson8App from "./components/Lesson8"
 import Lesson9App from "./components/Lesson9"
 import Lesson10App from "./components/Lessson10"
 
+import Lesson11App from "./components/Lessson11"
+
 function App() {
   const [selectedApp, setSelectedApp] = useState("Lesson1")
 
@@ -36,6 +38,8 @@ function App() {
         return <Lesson9App />
       case "Lesson10":
         return <Lesson10App />
+      case "Lesson11":
+        return <Lesson11App />
       default:
         return null
     }
@@ -57,6 +61,7 @@ function App() {
         <option value="Lesson8">Lesson 8</option>
         <option value="Lesson9">Lesson 9</option>
         <option value="Lesson10">Lesson 10</option>
+        <option value="Lesson11">Lesson 11</option>
       </select>
 
       <hr />
