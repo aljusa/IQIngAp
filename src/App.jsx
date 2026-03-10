@@ -20,6 +20,16 @@ import Lesson17App from "./components/Lesson17"
 import Lesson18App from "./components/Lesson18"
 import Lesson19App from "./components/Lesson19"
 import Lesson20App from "./components/Lesson20"
+import Lesson21App from "./components/Lesson21"
+import Lesson22App from "./components/Lesson22"
+import Lesson23App from "./components/Lesson23"
+import Lesson24App from "./components/Lesson24"
+import Lesson25App from "./components/Lesson25"
+import Lesson26App from "./components/Lesson26"
+import Lesson27App from "./components/Lesson27"
+import Lesson28App from "./components/Lesson28"
+import Lesson29App from "./components/Lesson29"
+import Lesson30App from "./components/Lesson30"
 
 function App() {
   const [selectedApp, setSelectedApp] = useState("Lesson1")
@@ -66,6 +76,26 @@ function App() {
         return <Lesson19App />
       case "Lesson20":
         return <Lesson20App />
+      case "Lesson21":
+        return <Lesson21App />
+      case "Lesson22":
+        return <Lesson22App />
+      case "Lesson23":
+        return <Lesson23App />
+      case "Lesson24":
+        return <Lesson24App />
+      case "Lesson25":
+        return <Lesson25App />
+      case "Lesson26":
+        return <Lesson26App />
+      case "Lesson27":
+        return <Lesson27App />
+      case "Lesson28":
+        return <Lesson28App />
+      case "Lesson29":
+        return <Lesson29App />
+      case "Lesson30":
+        return <Lesson30App />
       default:
         return null
     }
