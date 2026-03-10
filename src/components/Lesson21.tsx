@@ -109,7 +109,7 @@ const App = () => {
                 <hr />
                 <div className="flex gap-4 items-start">
                   <div className="bg-slate-200 font-mono p-2 rounded text-xs shrink-0">BLOOMS</div>
-                  <p>Very large steel ingots (typically $630\text{ mm} \times 400\text{ mm} \times 6\text{ m}$).</p>
+                  <p>Very large steel ingots (typically 630  mm x 400  mm x 6  m).</p>
                 </div>
                 <hr />
                 <div className="flex gap-4 items-start">
@@ -336,15 +336,6 @@ const App = () => {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {renderContent()}
       </main>
-
-      {/* Mobile Footer Decorator */}
-      <footer className="mt-12 border-t border-slate-200 bg-white py-6">
-        <div className="max-w-4xl mx-auto px-4 flex justify-between items-center text-slate-400 text-xs font-medium uppercase tracking-widest">
-          <span>Engineering English</span>
-          <span>Lesson 21</span>
-          <span>Material Formats</span>
-        </div>
-      </footer>
     </div>
   );
 };
