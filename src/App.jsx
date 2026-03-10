@@ -127,16 +127,16 @@ function App() {
         <option value="Lesson18">Lesson 18</option>
         <option value="Lesson19">Lesson 19</option>
         <option value="Lesson20">Lesson 20</option>
-     <option value="Lesson11">Lesson 21</option>
-                <option value="Lesson12">Lesson 22</option>
-        <option value="Lesson13">Lesson 23</option>
-        <option value="Lesson14">Lesson 24</option>
-        <option value="Lesson15">Lesson 25</option>
-        <option value="Lesson16">Lesson 26</option>
-        <option value="Lesson17">Lesson 27</option>
-        <option value="Lesson18">Lesson 28</option>
-        <option value="Lesson19">Lesson 29</option>
-        <option value="Lesson20">Lesson 30</option>
+     <option value="Lesson21">Lesson 21</option>
+                <option value="Lesson22">Lesson 22</option>
+        <option value="Lesson23">Lesson 23</option>
+        <option value="Lesson24">Lesson 24</option>
+        <option value="Lesson25">Lesson 25</option>
+        <option value="Lesson26">Lesson 26</option>
+        <option value="Lesson27">Lesson 27</option>
+        <option value="Lesson28">Lesson 28</option>
+        <option value="Lesson29">Lesson 29</option>
+        <option value="Lesson30">Lesson 30</option>
 
       </select>
 
