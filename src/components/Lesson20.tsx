@@ -341,9 +341,7 @@ export default function App() {
             <h1 className="text-3xl font-extrabold tracking-tight">Metal Processing</h1>
             <p className="text-slate-400 font-medium">Forming, Working and Heat-Treating Metal</p>
           </div>
-          <div className="bg-slate-800 p-2 rounded-lg text-xs font-mono border border-slate-700">
-            ENGINEERING_MODULE_04
-          </div>
+      
         </div>
       </header>
 
