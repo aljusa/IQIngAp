@@ -1,331 +1,379 @@
 import React, { useState } from 'react';
-import { Settings, Wind, Droplets, ArrowDownRight, Gauge, RotateCw, CheckCircle2, ChevronRight, BookOpen, PenTool, Lightbulb } from 'lucide-react';
-
-const Header = () => (
-  <header className="bg-blue-900 text-white p-8 rounded-b-3xl shadow-lg mb-8">
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold mb-4 flex items-center gap-3">
-        <Settings className="h-10 w-10 text-blue-300" />
-        Fluid Containment
-      </h1>
-      <p className="text-xl text-blue-100 max-w-2xl leading-relaxed">
-        This lesson explains how fluids (liquids and gases) are contained, transported, and controlled in engineering systems. It introduces key vocabulary related to pipes, tanks, and flow devices.
-      </p>
-    </div>
-  </header>
-);
-
-const VisualPipes = () => (
-  <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6 relative overflow-hidden">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Inclinación por Gravedad (Fall)</h4>
-    <svg viewBox="0 0 400 150" className="w-full max-w-md drop-shadow-md">
-      {/* Horizontal Pipe (Main) */}
-      <path d="M 20 40 L 200 40 L 200 70 L 20 70 Z" fill="#94a3b8" />
-      <text x="110" y="60" fontSize="14" fill="white" textAnchor="middle" fontWeight="bold">Water Main (Pressure)</text>
-      
-      {/* Downward Sloping Pipe (Sewer/Drain) */}
-      <path d="M 200 40 L 380 90 L 372 118 L 192 68 Z" fill="#64748b" />
-      <text x="290" y="85" fontSize="12" fill="white" textAnchor="middle" transform="rotate(15, 290, 85)" fontWeight="bold">Sewer / Drain</text>
-      
-      {/* Gravity Indicator */}
-      <path d="M 280 40 L 280 60" stroke="#ef4444" strokeWidth="2" markerEnd="url(#arrow)" />
-      <text x="280" y="30" fontSize="12" fill="#ef4444" textAnchor="middle" fontWeight="bold">Gravity (Fall)</text>
-      
-      <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
-        </marker>
-      </defs>
-    </svg>
-  </div>
-);
-
-const VisualTanks = () => (
-  <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Recipientes a Presión</h4>
-    <div className="flex gap-12 items-end">
-      {/* Open Tank */}
-      <div className="flex flex-col items-center">
-        <div className="w-24 h-24 border-4 border-t-0 border-blue-400 rounded-b-lg relative bg-blue-50">
-          <div className="absolute bottom-0 w-full h-16 bg-blue-300 opacity-50"></div>
-          <Droplets className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-500 opacity-50" />
-        </div>
-        <span className="mt-3 font-semibold text-slate-700">Open Tank</span>
-      </div>
-      
-      {/* Pressure Vessel */}
-      <div className="flex flex-col items-center">
-        <div className="w-20 h-32 border-4 border-slate-700 rounded-full relative bg-slate-200 flex items-center justify-center">
-          <Gauge className="text-slate-700 w-8 h-8 absolute -top-4 bg-white rounded-full" />
-          <Wind className="text-slate-400 w-8 h-8" />
-        </div>
-        <span className="mt-3 font-semibold text-slate-700">Pressure Vessel</span>
-      </div>
-    </div>
-  </div>
-);
-
-const VisualMachines = () => (
-  <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Control de Flujo</h4>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-2xl">
-      <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
-        <div className="p-3 bg-blue-100 text-blue-600 rounded-full mb-2"><Droplets size={24}/></div>
-        <span className="font-bold text-sm">Pump</span>
-        <span className="text-xs text-slate-500 text-center">Moves liquids</span>
-      </div>
-      <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
-        <div className="p-3 bg-green-100 text-green-600 rounded-full mb-2"><Wind size={24}/></div>
-        <span className="font-bold text-sm">Fan</span>
-        <span className="text-xs text-slate-500 text-center">Moves gases (low P)</span>
-      </div>
-      <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
-        <div className="p-3 bg-red-100 text-red-600 rounded-full mb-2"><Gauge size={24}/></div>
-        <span className="font-bold text-sm">Compressor</span>
-        <span className="text-xs text-slate-500 text-center">Increases gas P</span>
-      </div>
-      <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
-        <div className="p-3 bg-purple-100 text-purple-600 rounded-full mb-2"><RotateCw size={24}/></div>
-        <span className="font-bold text-sm">Turbine</span>
-        <span className="text-xs text-slate-500 text-center">Fluid to mechanical</span>
-      </div>
-    </div>
-  </div>
-);
-
-const VocabularySection = () => {
-  const sections = [
-    {
-      title: "Pipes, Ducts, and Hoses",
-      icon: <ArrowDownRight className="w-6 h-6 text-blue-500" />,
-      vocab: [
-        { term: "Pipe", def: "A rigid tube used to carry fluids." },
-        { term: "Pipe fittings", def: "Components used to connect pipes." },
-        { term: "Pipework", def: "An assembly of connected pipes." },
-        { term: "Main", def: "A large underground pipe (e.g., water or gas main)." },
-        { term: "Pipeline", def: "A long-distance pipe, often above ground." },
-        { term: "Drain", def: "A pipe that carries waste water." },
-        { term: "Sewer", def: "A large drain system in cities." },
-        { term: "Fall", def: "A downward slope that allows fluid to flow by gravity." },
-        { term: "Duct", def: "A passage for air (not under pressure)." },
-        { term: "Hose", def: "A flexible tube for liquids or gases." },
-        { term: "Hose fittings / couplings", def: "Connectors for hoses." },
-      ],
-      keyIdea: "Drains and sewers rely on gravity and require a downward slope to function.",
-      visual: <VisualPipes />
-    },
-    {
-      title: "Tanks",
-      icon: <Droplets className="w-6 h-6 text-blue-500" />,
-      vocab: [
-        { term: "Tank", def: "A container for liquids or gases." },
-        { term: "Watertight", def: "Does not leak liquid." },
-        { term: "Airtight", def: "Does not leak gas." },
-        { term: "Pressure vessel", def: "A tank designed to hold pressurized contents." },
-        { term: "Gas cylinder (bottle)", def: "A small portable pressure vessel." },
-        { term: "Boiler", def: "A pressure vessel that heats liquid to produce steam." },
-      ],
-      keyIdea: "Pressure vessels must be sealed and strong enough to withstand internal pressure.",
-      visual: <VisualTanks />
-    },
-    {
-      title: "Pumps, Fans, and Turbines",
-      icon: <RotateCw className="w-6 h-6 text-blue-500" />,
-      vocab: [
-        { term: "Pump", def: "A device that moves liquids through pipes." },
-        { term: "Flow", def: "Movement of fluid." },
-        { term: "Valve", def: "A device that controls fluid flow." },
-        { term: "Compressor", def: "A pump that increases gas pressure." },
-        { term: "Fan", def: "A device that moves air or gas." },
-        { term: "Turbine", def: "A rotating device driven by fluid flow." },
-      ],
-      keyIdea: "Pumps move liquids. Fans move gases at low pressure. Compressors increase gas pressure. Turbines convert fluid flow into mechanical energy.",
-      visual: <VisualMachines />
-    }
-  ];
-
-  return (
-    <div className="space-y-12">
-      <div className="flex items-center gap-2 mb-6 border-b-2 border-slate-100 pb-2">
-        <BookOpen className="text-blue-600" />
-        <h2 className="text-2xl font-bold text-slate-800">Key Vocabulary and Definitions</h2>
-      </div>
-      
-      {sections.map((sec, idx) => (
-        <div key={idx} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col md:flex-row">
-          <div className="p-8 md:w-1/2 flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
-                {sec.icon} {sec.title}
-              </h3>
-              <ul className="space-y-3 mb-6">
-                {sec.vocab.map((v, i) => (
-                  <li key={i} className="text-slate-600 leading-tight">
-                    <strong className="text-slate-900">{v.term}:</strong> {v.def}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <Lightbulb className="w-5 h-5 text-amber-600" />
-                <span className="font-bold text-amber-800">Key Idea</span>
-              </div>
-              <p className="text-amber-900 text-sm">{sec.keyIdea}</p>
-            </div>
-          </div>
-          <div className="bg-slate-50 md:w-1/2 p-8 flex items-center justify-center border-t md:border-t-0 md:border-l border-slate-100">
-            {sec.visual}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const ExamplesSection = () => {
-  const examples = [
-    "Water flows through the pipework to supply the building.",
-    "The sewer system relies on gravity and proper fall.",
-    "Air is distributed through ducts in the HVAC system.",
-    "The fuel is transported using flexible hoses.",
-    "The gas is stored in a high-pressure vessel.",
-    "A pump moves water from the tank to the system.",
-    "The compressor increases air pressure for tools.",
-    "The turbine converts wind energy into rotation."
-  ];
-
-  return (
-    <div className="mt-12 bg-blue-50 p-8 rounded-2xl">
-      <h2 className="text-2xl font-bold text-blue-900 mb-6 flex items-center gap-2">
-        <Settings className="w-6 h-6" /> Example Sentences (Context)
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {examples.map((ex, idx) => (
-          <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100 flex items-start gap-3">
-            <ChevronRight className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-            <p className="text-slate-700 italic">"{ex}"</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ExercisesSection = () => {
-  const [showAnswers, setShowAnswers] = useState(false);
-
-  return (
-    <div className="mt-12 mb-16">
-      <div className="flex items-center justify-between mb-6 border-b-2 border-slate-100 pb-2">
-        <div className="flex items-center gap-2">
-          <PenTool className="text-blue-600" />
-          <h2 className="text-2xl font-bold text-slate-800">Interactive Exercises</h2>
-        </div>
-        <button 
-          onClick={() => setShowAnswers(!showAnswers)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"
-        >
-          {showAnswers ? 'Hide Answers' : 'Show Answers'}
-          <CheckCircle2 className="w-4 h-4" />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Ex 1 */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2">1: Matching (Basic)</h3>
-          <ul className="space-y-4">
-            {[
-              { term: "Pipe", ans: "d. Rigid tube for fluids" },
-              { term: "Hose", ans: "b. Flexible tube" },
-              { term: "Pressure vessel", ans: "e. Container for pressurized gas/liquid" },
-              { term: "Pump", ans: "c. Device moving liquid" },
-              { term: "Valve", ans: "a. Device controlling fluid flow" }
-            ].map((item, i) => (
-              <li key={i} className="flex flex-col">
-                <span className="font-semibold text-slate-700">{item.term}</span>
-                {showAnswers ? (
-                  <span className="text-green-600 font-medium text-sm mt-1 bg-green-50 p-2 rounded">{item.ans}</span>
-                ) : (
-                  <span className="text-slate-400 text-sm mt-1 border-b border-dashed border-slate-300 w-full h-6 block"></span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Ex 2 */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2">2: Fill in the Blanks</h3>
-          <ul className="space-y-4 text-slate-700">
-            {[
-              { text: "A large underground water pipe is called a", ans: "main" },
-              { text: "A flexible tube used for fluids is a", ans: "hose" },
-              { text: "A device that increases gas pressure is a", ans: "compressor" },
-              { text: "A downward slope that allows flow is called a", ans: "fall" },
-              { text: "A container designed to hold pressure is a", ans: "pressure vessel" }
-            ].map((item, i) => (
-              <li key={i} className="leading-relaxed">
-                {item.text}{' '}
-                {showAnswers ? (
-                  <strong className="text-green-600 bg-green-50 px-2 py-0.5 rounded underline">{item.ans}</strong>
-                ) : (
-                  <span className="inline-block w-24 border-b-2 border-slate-400 mx-1"></span>
-                )}
-                .
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Ex 3 */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2">3: Contextual Usage</h3>
-          <ul className="space-y-4 text-slate-700">
-            {[
-              { text: "Wastewater flows through a city system called a", ans: "sewer" },
-              { text: "Air moves through a building via a", ans: "duct" },
-              { text: "A device used to move water through pipes is a", ans: "pump" },
-              { text: "A rotating machine driven by fluid flow is a", ans: "turbine" },
-              { text: "A sealed container storing high-pressure gas is a", ans: "gas cylinder / pressure vessel" }
-            ].map((item, i) => (
-              <li key={i} className="leading-relaxed">
-                {item.text}{' '}
-                {showAnswers ? (
-                  <strong className="text-green-600 bg-green-50 px-2 py-0.5 rounded underline">{item.ans}</strong>
-                ) : (
-                  <span className="inline-block w-24 border-b-2 border-slate-400 mx-1"></span>
-                )}
-                .
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { BookOpen, Activity, Droplets, CheckCircle, HelpCircle, ArrowRight } from 'lucide-react';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('lesson');
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
-      <Header />
-      <main className="max-w-6xl mx-auto px-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-l-4 border-blue-500 mb-10 flex gap-4 items-start">
-           <div className="bg-blue-100 p-2 rounded-full mt-1">
-             <Lightbulb className="w-5 h-5 text-blue-600" />
-           </div>
-           <div>
-             <h3 className="font-bold text-lg mb-1">Engineering Notes</h3>
-             <p className="text-slate-600 text-sm">Fluid systems require proper design for safe and efficient operation. Gravity, pressure, and mechanical devices all control fluid movement. Understanding these terms is essential in mechanical, civil, and process engineering.</p>
-           </div>
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+      {/* Header */}
+      <header className="bg-blue-900 text-white shadow-lg">
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <div className="flex items-center gap-3 mb-2">
+            <Droplets className="w-8 h-8 text-blue-300" />
+            <h1 className="text-3xl font-bold">Fluid Pressure Fundamentals</h1>
+          </div>
+          <p className="text-blue-200 text-lg max-w-2xl">
+            An engineering lesson on how pressure works in fluids, gauge vs. absolute pressure, and hydrostatic forces.
+          </p>
         </div>
-        
-        <VocabularySection />
-        <ExamplesSection />
-        <ExercisesSection />
+      </header>
+
+      {/* Navigation Tabs */}
+      <nav className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-6 flex gap-1 overflow-x-auto">
+          <TabButton 
+            active={activeTab === 'lesson'} 
+            onClick={() => setActiveTab('lesson')} 
+            icon={<BookOpen size={18} />} 
+            label="1. Vocabulary & Concepts" 
+          />
+          <TabButton 
+            active={activeTab === 'visuals'} 
+            onClick={() => setActiveTab('visuals')} 
+            icon={<Activity size={18} />} 
+            label="2. Visual Diagrams" 
+          />
+          <TabButton 
+            active={activeTab === 'exercises'} 
+            onClick={() => setActiveTab('exercises')} 
+            icon={<CheckCircle size={18} />} 
+            label="3. Interactive Exercises" 
+          />
+        </div>
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="max-w-5xl mx-auto px-6 py-8">
+        {activeTab === 'lesson' && <LessonTab />}
+        {activeTab === 'visuals' && <VisualsTab />}
+        {activeTab === 'exercises' && <ExercisesTab />}
       </main>
     </div>
+  );
+}
+
+// --- TAB COMPONENTS ---
+
+function LessonTab() {
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <h2 className="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+          <BookOpen className="text-blue-500" /> Overview
+        </h2>
+        <p className="text-slate-600 leading-relaxed">
+          This lesson explains how pressure works in fluids, the difference between gauge and absolute pressure, and how pressure is generated in liquids. The focus is on key engineering vocabulary used in fluid systems.
+        </p>
+      </section>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Gauge & Absolute Pressure */}
+        <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+          <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Gauge & Absolute Pressure</h3>
+          <ul className="space-y-3">
+            <VocabularyItem term="Pressure" def="Force acting on an area." />
+            <VocabularyItem term="Pascal (Pa)" def="SI unit of pressure (1 Pa = 1 N/m²)." />
+            <VocabularyItem term="Bar" def="A unit of pressure (approximately atmospheric pressure)." />
+            <VocabularyItem term="Atmospheric pressure" def="Pressure of the air at sea level." />
+            <VocabularyItem term="Pressure gauge" def="A device used to measure pressure." />
+            <VocabularyItem term="Gauge pressure" def="Difference between internal pressure and atmospheric pressure." />
+            <VocabularyItem term="Absolute pressure" def="Pressure measured relative to a perfect vacuum." />
+            <VocabularyItem term="Vacuum" def="A space with no gas or liquid (zero pressure)." />
+          </ul>
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-blue-900">
+            <strong>Key Idea:</strong> Engineers use gauge pressure to understand how much higher or lower internal pressure is compared to outside pressure.
+          </div>
+        </section>
+
+        {/* Hydrostatic Pressure & Context */}
+        <div className="space-y-6">
+          <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Hydrostatic Pressure</h3>
+            <ul className="space-y-3">
+              <VocabularyItem term="Hydrostatic pressure" def="Pressure generated by a liquid due to its height." />
+              <VocabularyItem term="Head of water" def="Height of water creating pressure." />
+              <VocabularyItem term="Water tower" def="Structure storing water at height to create pressure." />
+              <VocabularyItem term="Water main" def="Pipe distributing water." />
+            </ul>
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-blue-900">
+              <strong>Key Idea:</strong> The greater the height of the liquid, the greater the pressure at lower levels.
+            </div>
+          </section>
+
+          <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Usage in Context</h3>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li className="flex gap-2 items-start"><ArrowRight size={16} className="mt-0.5 text-blue-500 shrink-0" /> The system pressure is measured in Pascals.</li>
+              <li className="flex gap-2 items-start"><ArrowRight size={16} className="mt-0.5 text-blue-500 shrink-0" /> The pressure gauge shows a positive gauge pressure.</li>
+              <li className="flex gap-2 items-start"><ArrowRight size={16} className="mt-0.5 text-blue-500 shrink-0" /> Engineers calculate absolute pressure for accurate system analysis.</li>
+              <li className="flex gap-2 items-start"><ArrowRight size={16} className="mt-0.5 text-blue-500 shrink-0" /> A partial vacuum exists inside the sealed container.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VisualsTab() {
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="grid md:grid-cols-2 gap-8">
+        
+        {/* Diagram 1: Pressure Scale */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col">
+          <h3 className="text-xl font-bold text-slate-800 mb-2">Absolute vs. Gauge Pressure</h3>
+          <p className="text-sm text-slate-500 mb-6">Visual representation of pressure measurement scales.</p>
+          <div className="flex-1 flex items-center justify-center bg-slate-50 rounded-lg p-4">
+            <svg viewBox="0 0 400 350" className="w-full h-auto max-w-sm">
+              <defs>
+                <marker id="arrowUp" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+                </marker>
+                <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+                </marker>
+              </defs>
+              
+              {/* Y Axis */}
+              <line x1="50" y1="300" x2="50" y2="20" stroke="#cbd5e1" strokeWidth="4" />
+              
+              {/* Perfect Vacuum Line */}
+              <line x1="40" y1="300" x2="350" y2="300" stroke="#64748b" strokeWidth="2" strokeDasharray="5,5" />
+              <text x="360" y="305" fontSize="12" fill="#64748b" textAnchor="end">Perfect Vacuum (0 Pa)</text>
+              
+              {/* Atmospheric Pressure Line */}
+              <line x1="40" y1="180" x2="350" y2="180" stroke="#3b82f6" strokeWidth="2" strokeDasharray="5,5" />
+              <text x="360" y="185" fontSize="12" fill="#3b82f6" textAnchor="end">Atmospheric Pressure (~100kPa)</text>
+
+              {/* System Pressure Line (High) */}
+              <line x1="40" y1="60" x2="350" y2="60" stroke="#ef4444" strokeWidth="2" />
+              <text x="360" y="55" fontSize="12" fill="#ef4444" textAnchor="end">System Pressure A</text>
+
+              {/* System Pressure Line (Low) */}
+              <line x1="40" y1="240" x2="350" y2="240" stroke="#f59e0b" strokeWidth="2" />
+              <text x="360" y="255" fontSize="12" fill="#f59e0b" textAnchor="end">System Pressure B</text>
+
+              {/* Absolute Pressure A Arrow */}
+              <path d="M 120 300 L 120 65" stroke="#8b5cf6" strokeWidth="3" markerEnd="url(#arrowUp)" className="text-violet-500" />
+              <text x="125" y="270" fontSize="10" fill="#8b5cf6" transform="rotate(-90 125,270)">Absolute Press. A</text>
+
+              {/* Gauge Pressure A Arrow */}
+              <path d="M 180 180 L 180 65" stroke="#22c55e" strokeWidth="3" markerEnd="url(#arrowUp)" className="text-green-500" />
+              <text x="185" y="150" fontSize="10" fill="#22c55e" transform="rotate(-90 185,150)">+ Gauge Press.</text>
+
+              {/* Gauge Pressure B Arrow (Negative) */}
+              <path d="M 240 180 L 240 235" stroke="#ef4444" strokeWidth="3" markerEnd="url(#arrowDown)" className="text-red-500" />
+              <text x="245" y="215" fontSize="10" fill="#ef4444" transform="rotate(-90 245,215)">- Gauge Press. (Vacuum)</text>
+              
+            </svg>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 p-3 rounded">
+            <div><span className="inline-block w-3 h-3 bg-violet-500 rounded-full mr-1"></span> Absolute: From zero</div>
+            <div><span className="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span> + Gauge: Above atm</div>
+            <div><span className="inline-block w-3 h-3 bg-blue-500 rounded-full mr-1"></span> Atm: Sea level</div>
+            <div><span className="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span> - Gauge: Below atm</div>
+          </div>
+        </div>
+
+        {/* Diagram 2: Hydrostatic Pressure */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col">
+          <h3 className="text-xl font-bold text-slate-800 mb-2">Hydrostatic Pressure (Water Tower)</h3>
+          <p className="text-sm text-slate-500 mb-6">How the head of water creates system pressure.</p>
+          <div className="flex-1 flex items-center justify-center bg-slate-50 rounded-lg p-4">
+            <svg viewBox="0 0 300 350" className="w-full h-auto max-w-sm">
+              <defs>
+                <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="100%" stopColor="#1e3a8a" />
+                </linearGradient>
+              </defs>
+
+              {/* Ground */}
+              <rect x="0" y="320" width="300" height="30" fill="#22c55e" opacity="0.2" />
+              <line x1="0" y1="320" x2="300" y2="320" stroke="#166534" strokeWidth="2" />
+
+              {/* Tower Legs */}
+              <path d="M 120 320 L 140 100 M 180 320 L 160 100" stroke="#64748b" strokeWidth="6" strokeLinecap="round" />
+              <line x1="125" y1="250" x2="175" y2="250" stroke="#64748b" strokeWidth="4" />
+              <line x1="130" y1="180" x2="170" y2="180" stroke="#64748b" strokeWidth="4" />
+
+              {/* Water Tank */}
+              <rect x="100" y="40" width="100" height="80" fill="url(#waterGrad)" rx="10" />
+              <path d="M 100 50 Q 150 40 200 50" fill="none" stroke="#93c5fd" strokeWidth="2" />
+              <text x="150" y="85" fontSize="12" fill="white" textAnchor="middle" fontWeight="bold">Water Tank</text>
+
+              {/* Pipes (Main & Distribution) */}
+              <rect x="145" y="120" width="10" height="180" fill="#3b82f6" />
+              <rect x="145" y="290" width="120" height="10" fill="#1e40af" />
+              
+              {/* Pressure Output / House representation */}
+              <rect x="250" y="270" width="30" height="30" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="2" />
+              <path d="M 250 270 L 265 250 L 280 270 Z" fill="#ef4444" />
+              
+              {/* Height Indicator (Head of water) */}
+              <line x1="80" y1="40" x2="80" y2="295" stroke="#ef4444" strokeWidth="2" strokeDasharray="4,4" />
+              <line x1="70" y1="40" x2="90" y2="40" stroke="#ef4444" strokeWidth="2" />
+              <line x1="70" y1="295" x2="90" y2="295" stroke="#ef4444" strokeWidth="2" />
+              <text x="70" y="170" fontSize="14" fill="#ef4444" textAnchor="end" fontWeight="bold">Height (h)</text>
+              <text x="70" y="185" fontSize="10" fill="#ef4444" textAnchor="end">Head of water</text>
+
+              {/* Pressure Indicator */}
+              <circle cx="265" cy="300" r="15" fill="white" stroke="#3b82f6" strokeWidth="3" />
+              <line x1="265" y1="300" x2="275" y2="290" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
+              <text x="265" y="330" fontSize="10" fill="#1e3a8a" textAnchor="middle" fontWeight="bold">High Pressure</text>
+
+            </svg>
+          </div>
+          <div className="mt-4 p-3 bg-blue-50 rounded text-sm text-slate-700">
+            <strong>Rule:</strong> Hydrostatic Pressure = Density × Gravity × <strong>Height (h)</strong>. The taller the tower, the higher the pressure at the bottom.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+function ExercisesTab() {
+  const [q1, setQ1] = useState('');
+  const [q2, setQ2] = useState('');
+  const [q3, setQ3] = useState('');
+  const [showResults, setShowResults] = useState(false);
+
+  const checkAnswers = () => setShowResults(true);
+  const reset = () => { setShowResults(false); setQ1(''); setQ2(''); setQ3(''); };
+
+  const getStatus = (val:string, correct:string) => {
+    if (!showResults) return 'border-slate-300';
+    return val === correct ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50';
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 max-w-3xl mx-auto">
+        <div className="flex items-center gap-3 mb-6 border-b pb-4">
+          <HelpCircle className="text-blue-500 w-8 h-8" />
+          <h2 className="text-2xl font-bold text-slate-800">Knowledge Check</h2>
+        </div>
+
+        <div className="space-y-6">
+          {/* Question 1 */}
+          <div className="space-y-2">
+            <label className="block text-slate-700 font-medium">
+              1. The SI unit of pressure is the:
+            </label>
+            <select 
+              value={q1} 
+              onChange={(e) => setQ1(e.target.value)}
+              disabled={showResults}
+              className={`w-full p-3 rounded-lg border ${getStatus(q1, 'pascal')} outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              <option value="">Select an answer...</option>
+              <option value="bar">Bar</option>
+              <option value="pascal">Pascal (Pa)</option>
+              <option value="vacuum">Vacuum</option>
+            </select>
+            {showResults && q1 === 'pascal' && <p className="text-green-600 text-sm flex items-center gap-1"><CheckCircle size={14}/> Correct</p>}
+          </div>
+
+          {/* Question 2 */}
+          <div className="space-y-2">
+            <label className="block text-slate-700 font-medium">
+              2. Pressure compared to a vacuum is called ________ pressure.
+            </label>
+            <select 
+              value={q2} 
+              onChange={(e) => setQ2(e.target.value)}
+              disabled={showResults}
+              className={`w-full p-3 rounded-lg border ${getStatus(q2, 'absolute')} outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              <option value="">Select an answer...</option>
+              <option value="gauge">Gauge</option>
+              <option value="hydrostatic">Hydrostatic</option>
+              <option value="absolute">Absolute</option>
+            </select>
+            {showResults && q2 === 'absolute' && <p className="text-green-600 text-sm flex items-center gap-1"><CheckCircle size={14}/> Correct</p>}
+          </div>
+
+          {/* Question 3 */}
+          <div className="space-y-2">
+            <label className="block text-slate-700 font-medium">
+              3. Water at a higher elevation increases ________ pressure at lower points.
+            </label>
+            <select 
+              value={q3} 
+              onChange={(e) => setQ3(e.target.value)}
+              disabled={showResults}
+              className={`w-full p-3 rounded-lg border ${getStatus(q3, 'hydrostatic')} outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              <option value="">Select an answer...</option>
+              <option value="atmospheric">Atmospheric</option>
+              <option value="hydrostatic">Hydrostatic</option>
+              <option value="vacuum">Vacuum</option>
+            </select>
+            {showResults && q3 === 'hydrostatic' && <p className="text-green-600 text-sm flex items-center gap-1"><CheckCircle size={14}/> Correct</p>}
+          </div>
+        </div>
+
+        <div className="mt-8 flex gap-4">
+          {!showResults ? (
+            <button 
+              onClick={checkAnswers}
+              disabled={!q1 || !q2 || !q3}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+            >
+              Submit Answers
+            </button>
+          ) : (
+            <button 
+              onClick={reset}
+              className="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-6 rounded-lg transition-colors flex-1"
+            >
+              Try Again
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- UTILITY COMPONENTS ---
+
+type TabButtonProps = {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+};
+
+function TabButton({ active, onClick, icon, label }: TabButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-6 py-4 text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
+        active 
+          ? 'border-blue-600 text-blue-700 bg-blue-50/50' 
+          : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+      }`}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
+type VocabularyItemProps = {
+  term: string;
+  def: string;
+};
+
+function VocabularyItem({ term, def }: VocabularyItemProps) {
+  return (
+    <li className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+      <strong className="text-blue-900 min-w-[140px] shrink-0">{term}:</strong>
+      <span className="text-slate-600">{def}</span>
+    </li>
   );
 }

@@ -86,19 +86,53 @@ export default function EngineeringModule() {
     { title: "Torsion", nonTech: "Twisting", term: "Torsional Stress", meaning: "The material twists.", fail: "Fracture or shear", icon: TorsionDiagram },
   ];
 
+  const ex1Questions: { label: string; id: QuestionKey }[] = [
+  { label: "Stretching", id: "q1" },
+  { label: "Twisting", id: "q2" },
+  { label: "Squashing", id: "q3" },
+  { label: "Scissoring", id: "q4" },
+  { label: "Bending", id: "q5" }
+];
+const ex2Questions: { id: QuestionKey; pre: string; post: string }[] = [
+  { id: 'q1', pre: "When a material lengthens, it is under", post: "stress." },
+  { id: 'q2', pre: "A tall, thin column may", post: "under compression." },
+  { id: 'q3', pre: "The center of a beam where stress is zero is called the", post: "axis." },
+  { id: 'q4', pre: "Sudden failure with little deformation is typical of", post: "stress." },
+  { id: 'q5', pre: "Twisting forces create", post: "stress." }
+];
+
+const ex3Questions: {
+  id: QuestionKey;
+  text: string;
+  options: string[];
+}[] = [
+  { id: 'q1', text: "A bridge beam curves downward under load. This is called ____.", options: ["hogging", "sagging", "buckling", "shearing"] },
+  { id: 'q2', text: "A metal rod breaks after being twisted repeatedly. This is failure due to ____.", options: ["tension", "bending", "torsion", "compression"] },
+  { id: 'q3', text: "A thick concrete block under heavy load will likely fail by ____.", options: ["crushing", "buckling", "deflection", "elongation"] },
+  { id: 'q4', text: "The bottom surface of a bent (sagging) beam is under ____ stress.", options: ["compressive", "shear", "tensile", "zero"] },
+  { id: 'q5', text: "A rivet connecting two plates fails due to sideways forces. This is ____ stress.", options: ["shear", "bending", "torsional", "compressive"] }
+];
+
+
+
+type QuestionKey = 'q1' | 'q2' | 'q3' | 'q4' | 'q5';
+
+type Results = Record<QuestionKey, boolean>;
+type Answers = Record<QuestionKey, string>;
+
   // State for Exercises
   const [ex1Answers, setEx1Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
   const [ex2Answers, setEx2Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
   const [ex3Answers, setEx3Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
   
-  const [resultsEx1, setResultsEx1] = useState(null);
-  const [resultsEx2, setResultsEx2] = useState(null);
-  const [resultsEx3, setResultsEx3] = useState(null);
+const [resultsEx1, setResultsEx1] = useState<Results | null>(null);
+const [resultsEx2, setResultsEx2] = useState<Results | null>(null);
+const [resultsEx3, setResultsEx3] = useState<Results | null>(null);
 
   // Exercise Handlers
-  const handleEx1Change = (q, val) => setEx1Answers(prev => ({ ...prev, [q]: val }));
-  const handleEx2Change = (q, val) => setEx2Answers(prev => ({ ...prev, [q]: val }));
-  const handleEx3Change = (q, val) => setEx3Answers(prev => ({ ...prev, [q]: val }));
+  const handleEx1Change = (q: keyof Answers, val: string) => setEx1Answers(prev => ({ ...prev, [q]: val }));
+  const handleEx2Change = (q: keyof Answers, val: string) => setEx2Answers(prev => ({ ...prev, [q]: val }));
+  const handleEx3Change = (q: keyof Answers, val: string) => setEx3Answers(prev => ({ ...prev, [q]: val }));
 
   const checkEx1 = () => {
     setResultsEx1({
@@ -111,7 +145,7 @@ export default function EngineeringModule() {
   };
 
   const checkEx2 = () => {
-    const clean = (str) => str.toLowerCase().trim();
+    const clean = (str:string) => str.toLowerCase().trim();
     setResultsEx2({
       q1: clean(ex2Answers.q1) === 'tensile' || clean(ex2Answers.q1) === 'tension',
       q2: clean(ex2Answers.q2) === 'buckle',
@@ -136,10 +170,7 @@ export default function EngineeringModule() {
       {/* Header */}
       <header className="bg-slate-900 text-white py-12 px-6 shadow-md relative overflow-hidden">
         <div className="max-w-5xl mx-auto relative z-10">
-          <div className="flex items-center gap-3 mb-4 text-blue-400">
-            <BookOpen size={24} />
-            <span className="uppercase tracking-widest text-sm font-semibold">Engineering Mechanics Module</span>
-          </div>
+          
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
             Force, Deformation, and Failure
           </h1>
@@ -273,13 +304,7 @@ export default function EngineeringModule() {
               <p className="mb-6 text-slate-600">Match the non-technical word with the correct technical term.</p>
               
               <div className="space-y-3 max-w-lg">
-                {[
-                  { label: "Stretching", id: "q1" },
-                  { label: "Twisting", id: "q2" },
-                  { label: "Squashing", id: "q3" },
-                  { label: "Scissoring", id: "q4" },
-                  { label: "Bending", id: "q5" }
-                ].map((item) => (
+                {ex1Questions.map((item) => (
                   <div key={item.id} className="flex items-center justify-between p-3 bg-slate-50 rounded border border-slate-100">
                     <span className="font-semibold text-slate-700 w-32">{item.label}</span>
                     <ArrowRight size={16} className="text-slate-400" />
@@ -312,13 +337,7 @@ export default function EngineeringModule() {
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
               <h3 className="text-xl font-bold text-blue-900 mb-4">Exercise 2: Fill in the Blanks (Intermediate)</h3>
               <div className="space-y-4">
-                {[
-                  { id: 'q1', pre: "When a material lengthens, it is under", post: "stress." },
-                  { id: 'q2', pre: "A tall, thin column may", post: "under compression." },
-                  { id: 'q3', pre: "The center of a beam where stress is zero is called the", post: "axis." },
-                  { id: 'q4', pre: "Sudden failure with little deformation is typical of", post: "stress." },
-                  { id: 'q5', pre: "Twisting forces create", post: "stress." }
-                ].map((q) => (
+               {ex2Questions.map((q) => (
                    <div key={q.id} className="text-lg text-slate-700 flex flex-wrap items-center gap-2">
                      <span>{q.pre}</span>
                      <div className="relative">
@@ -347,13 +366,7 @@ export default function EngineeringModule() {
              <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
               <h3 className="text-xl font-bold text-blue-900 mb-4">Exercise 3: Contextual Usage (Advanced)</h3>
               <div className="space-y-6">
-                {[
-                  { id: 'q1', text: "A bridge beam curves downward under load. This is called ____.", options: ["hogging", "sagging", "buckling", "shearing"] },
-                  { id: 'q2', text: "A metal rod breaks after being twisted repeatedly. This is failure due to ____.", options: ["tension", "bending", "torsion", "compression"] },
-                  { id: 'q3', text: "A thick concrete block under heavy load will likely fail by ____.", options: ["crushing", "buckling", "deflection", "elongation"] },
-                  { id: 'q4', text: "The bottom surface of a bent (sagging) beam is under ____ stress.", options: ["compressive", "shear", "tensile", "zero"] },
-                  { id: 'q5', text: "A rivet connecting two plates fails due to sideways forces. This is ____ stress.", options: ["shear", "bending", "torsional", "compressive"] }
-                ].map((q) => (
+                {ex3Questions.map((q) => (
                    <div key={q.id} className="bg-slate-50 p-4 rounded border border-slate-100">
                      <p className="font-semibold text-slate-800 mb-3">{q.text}</p>
                      <div className="flex flex-wrap gap-3">
@@ -392,10 +405,7 @@ export default function EngineeringModule() {
 
       </main>
       
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-6 text-center">
-        <p>Interactive Engineering Learning Module. Created based on academic text.</p>
-      </footer>
+   
     </div>
   );
 }
