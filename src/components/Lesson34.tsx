@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Settings, RotateCw, Activity, ArrowRightLeft, MoveRight, BookOpen, CheckCircle, ArrowDownToLine } from 'lucide-react';
 
 const AngularMotionVisual = () => (
@@ -227,9 +227,7 @@ export default function App() {
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
             Moving Parts
           </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto">
-            A comprehensive overview of different types of motion in mechanical systems, exploring key concepts related to rotating components and friction.
-          </p>
+         
         </div>
       </header>
 
@@ -240,13 +238,12 @@ export default function App() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="p-8 md:p-10 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100">
-              <span className="text-sm font-bold tracking-wider text-blue-600 uppercase mb-2 block">Sección A</span>
+          
               <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <RotateCw className="text-blue-500" /> Angular Motion
               </h2>
               
               <div className="bg-gray-50 p-5 rounded-xl mb-6">
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Explicación & Vocabulario</h3>
                 <Term title="Angular motion" definition="Movement around a fixed point in a circular path." />
                 <Term title="Axis (of rotation)" definition="The central point or line around which motion occurs." />
                 <Term title="Pivot" definition="The point where a component rotates." />
@@ -254,17 +251,12 @@ export default function App() {
                 <Term title="Angular acceleration" definition="Increase in angular velocity." />
               </div>
 
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                <p className="font-semibold text-blue-900 text-sm">🔑 Key Idea:</p>
-                <p className="text-blue-800 text-sm mt-1">In angular motion, one part remains fixed while another part rotates around it.</p>
-              </div>
-              <div className="mt-4 italic text-sm text-gray-500">
-                Ejemplo: "The wheel rotates around its axis, demonstrating angular motion."
-              </div>
+              
+            
             </div>
             <div className="p-8 md:p-10 flex flex-col items-center justify-center bg-gray-50">
               <div className="w-full">
-                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 text-center">Sugerencia Visual Inferida</h3>
+               
                  <AngularMotionVisual />
               </div>
             </div>
@@ -276,18 +268,16 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="p-8 md:p-10 flex flex-col items-center justify-center bg-gray-50 order-2 md:order-1 border-t md:border-t-0 md:border-r border-gray-100">
                <div className="w-full">
-                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 text-center">Sugerencia Visual Inferida</h3>
+                 
                  <RotaryReciprocatingVisual />
               </div>
             </div>
             <div className="p-8 md:p-10 flex flex-col justify-center order-1 md:order-2">
-              <span className="text-sm font-bold tracking-wider text-indigo-600 uppercase mb-2 block">Sección B</span>
               <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <ArrowRightLeft className="text-indigo-500" /> Rotary & Reciprocating
               </h2>
               
               <div className="bg-gray-50 p-5 rounded-xl mb-6">
-                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Explicación & Vocabulario</h3>
                 <Term title="Rotary motion" definition="Continuous circular movement." />
                 <Term title="Revolution / Rotation" definition="One complete turn (360°)." />
                 <Term title="Rotational velocity" definition="Speed of rotation (measured in rpm)." />
@@ -296,17 +286,7 @@ export default function App() {
                 <Term title="Reciprocate" definition="To move alternately in opposite directions." />
               </div>
 
-              <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg">
-                <p className="font-semibold text-indigo-900 text-sm">🔑 Key Notes:</p>
-                <ul className="list-disc pl-5 text-indigo-800 text-sm mt-1 space-y-1">
-                  <li>Rotary motion produces centrifugal force.</li>
-                  <li>Reciprocating motion is often converted into rotary motion in machines.</li>
-                </ul>
-              </div>
-              <div className="mt-4 italic text-sm text-gray-500 space-y-1">
-                <p>Ejemplo: "The motor shaft has a high rotational velocity measured in rpm."</p>
-                <p>Ejemplo: "The piston shows reciprocating motion, moving back and forth."</p>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -317,7 +297,6 @@ export default function App() {
           {/* Section C: Engine Revs */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
             <div className="p-8 flex-grow">
-              <span className="text-sm font-bold tracking-wider text-red-600 uppercase mb-2 block">Sección C</span>
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <Activity className="text-red-500" /> Engine Revs
               </h2>
@@ -329,12 +308,10 @@ export default function App() {
                 <Term title="Rev limiter" definition="Device that restricts maximum speed." />
                 <Term title="Over-rev" definition="Exceed the safe engine speed." />
               </div>
-               <div className="italic text-sm text-gray-500 mb-6">
-                Ejemplo: "The engine exceeded the limit and began to over-rev."
-              </div>
+              
             </div>
             <div className="p-6 bg-gray-50 border-t border-gray-100 flex flex-col items-center">
-              <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Sugerencia Visual Inferida</h3>
+          
               <TachometerVisual />
             </div>
           </div>
@@ -342,7 +319,7 @@ export default function App() {
           {/* Section D: Friction */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
             <div className="p-8 flex-grow">
-              <span className="text-sm font-bold tracking-wider text-amber-600 uppercase mb-2 block">Sección D</span>
+             
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <ArrowDownToLine className="text-amber-500" /> Friction
               </h2>
@@ -355,13 +332,10 @@ export default function App() {
                 <Term title="Dynamic friction" definition="Friction when surfaces are sliding." />
               </div>
 
-              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg mb-6">
-                <p className="font-semibold text-amber-900 text-sm">🔑 Key Idea:</p>
-                <p className="text-amber-800 text-sm mt-1">More force is required to overcome static friction than dynamic friction.</p>
-              </div>
+             
             </div>
             <div className="p-6 bg-gray-50 border-t border-gray-100 flex flex-col items-center">
-               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Sugerencia Visual Inferida</h3>
+            
               <FrictionVisual />
             </div>
           </div>

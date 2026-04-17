@@ -72,9 +72,7 @@ export default function App() {
             <Settings className="w-10 h-10 text-indigo-400" />
             Engines and Motors
           </h1>
-          <p className="text-xl text-indigo-200">
-            Una lección interactiva sobre terminología de ingeniería mecánica, operaciones de motores y generación de energía.
-          </p>
+          
         </div>
       </header>
 
@@ -146,11 +144,7 @@ export default function App() {
             </div>
           </div>
           
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-            <p className="text-sm text-yellow-800 font-medium italic">
-              <strong>Key Idea:</strong> Engines and motors generate rotary motion and torque to drive mechanical systems.
-            </p>
-          </div>
+        
         </section>
 
         {/* 2B. INTERNAL COMBUSTION ENGINE (4-STROKE CYCLE) */}
@@ -233,8 +227,8 @@ export default function App() {
 
         {/* 3. EXAMPLE SENTENCES */}
         <section className="bg-indigo-900 text-white p-8 rounded-2xl shadow-md">
-          <h2 className="text-2xl font-bold mb-6 border-b-2 border-indigo-700 pb-2">3. Example Sentences (Contexto de Ingeniería)</h2>
-          <ul className="grid md:grid-cols-2 gap-4">
+          <h2 className="text-2xl font-bold mb-6 border-b-2 border-indigo-700 pb-2">3. Example Sentences</h2>
+          <ul className="grid md:grid-cols-1 gap-4">
             <li className="bg-indigo-800/50 p-4 rounded-lg flex gap-3">
               <span className="text-indigo-300 font-bold">1.</span> 
               The engine produces <strong>torque</strong> to rotate the wheels.
@@ -268,8 +262,7 @@ export default function App() {
 
           {/* Exercise 1 */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h3 className="text-xl font-bold text-slate-700 mb-4">Exercise 1: Matching (Basic)</h3>
-            <p className="text-sm text-slate-500 mb-6">Selecciona la letra de la definición correcta para cada término.</p>
+            <h3 className="text-xl font-bold text-slate-700 mb-4">Exercise 1: Matching</h3>
             
             <div className="flex flex-col md:flex-row gap-8">
               <div className="flex-1 space-y-4">
@@ -312,7 +305,7 @@ export default function App() {
 
           {/* Exercise 2 */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <h3 className="text-xl font-bold text-slate-700 mb-4">Exercise 2: Fill in the Blanks (Intermediate)</h3>
+            <h3 className="text-xl font-bold text-slate-700 mb-4">Exercise 2: Fill in the Blanks </h3>
             <div className="space-y-4">
               {[
                 { id: 'q1', pre: 'Rotational force is called ', post: '.', correct: 'torque' },

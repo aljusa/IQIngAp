@@ -5,10 +5,8 @@ const Header = () => (
   <header className="bg-slate-900 text-white p-6 shadow-md">
     <div className="max-w-5xl mx-auto flex items-center gap-3">
       <Wind className="w-8 h-8 text-blue-400" />
-      <h1 className="text-2xl font-bold tracking-wide">Dinámica de Fluidos</h1>
-      <span className="ml-auto text-sm font-medium bg-slate-800 px-3 py-1 rounded-full text-blue-300">
-        Módulo Educativo
-      </span>
+      <h1 className="text-2xl font-bold tracking-wide">Fluid Dynamics</h1>
+     
     </div>
   </header>
 );
@@ -32,7 +30,7 @@ const Section = ({ title, icon: Icon, children }) => (
 const FlowDiagram = () => (
   <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto bg-slate-50 p-6 rounded-xl border border-slate-200">
     <div>
-      <h4 className="text-sm font-bold text-slate-700 mb-2">Flujo Laminar (Laminar Flow)</h4>
+      <h4 className="text-sm font-bold text-slate-700 mb-2">Laminar Flow</h4>
       <svg viewBox="0 0 400 100" className="w-full h-auto bg-white border border-slate-200 rounded-lg">
         {/* Sphere */}
         <circle cx="100" cy="50" r="20" fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
@@ -40,11 +38,11 @@ const FlowDiagram = () => (
         <path d="M 0 20 L 60 20 Q 100 0 140 20 L 400 20" fill="none" stroke="#3b82f6" strokeWidth="2" />
         <path d="M 0 50 L 70 50 Q 100 20 130 50 L 400 50" fill="none" stroke="#3b82f6" strokeWidth="2" />
         <path d="M 0 80 L 60 80 Q 100 100 140 80 L 400 80" fill="none" stroke="#3b82f6" strokeWidth="2" />
-        <text x="300" y="45" fontSize="10" fill="#64748b">Flujo suave y ordenado</text>
+        <text x="300" y="45" fontSize="10" fill="#64748b">Smooth and orderly flow</text>
       </svg>
     </div>
     <div>
-      <h4 className="text-sm font-bold text-slate-700 mb-2">Flujo Turbulento (Turbulent Flow)</h4>
+      <h4 className="text-sm font-bold text-slate-700 mb-2">Turbulent Flow</h4>
       <svg viewBox="0 0 400 100" className="w-full h-auto bg-white border border-slate-200 rounded-lg">
         {/* Sphere */}
         <circle cx="100" cy="50" r="20" fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
@@ -55,7 +53,7 @@ const FlowDiagram = () => (
         {/* Wake/Vortex */}
         <circle cx="160" cy="50" r="10" fill="none" stroke="#ef4444" strokeWidth="1" strokeDasharray="2,2" />
         <circle cx="200" cy="60" r="15" fill="none" stroke="#ef4444" strokeWidth="1" strokeDasharray="2,2" />
-        <text x="300" y="45" fontSize="10" fill="#ef4444">Estela (Wake) y Vórtices</text>
+        <text x="300" y="45" fontSize="10" fill="#ef4444">Wake and Vortices</text>
       </svg>
     </div>
   </div>
@@ -78,22 +76,22 @@ const AerofoilDiagram = () => (
       
       {/* Forces */}
       <path d="M 250 140 L 250 40" fill="none" stroke="#22c55e" strokeWidth="3" markerEnd="url(#arrow-green)" />
-      <text x="260" y="80" fontSize="14" fill="#16a34a" fontWeight="bold">Sustentación (Lift)</text>
+      <text x="260" y="80" fontSize="14" fill="#16a34a" fontWeight="bold">Lift</text>
 
       <path d="M 400 170 L 480 170" fill="none" stroke="#ef4444" strokeWidth="3" markerEnd="url(#arrow-red)" />
-      <text x="420" y="160" fontSize="14" fill="#dc2626" fontWeight="bold">Arrastre (Drag)</text>
+      <text x="420" y="160" fontSize="14" fill="#dc2626" fontWeight="bold">Drag</text>
 
       {/* Parts labels */}
       <circle cx="100" cy="150" r="4" fill="#0284c7" />
-      <text x="80" y="130" fontSize="12" fill="#0284c7" textAnchor="end">Borde de ataque (Leading edge)</text>
+      <text x="80" y="130" fontSize="12" fill="#0284c7" textAnchor="end">Leading edge</text>
       
       <circle cx="400" cy="170" r="4" fill="#0284c7" />
-      <text x="410" y="200" fontSize="12" fill="#0284c7">Borde de salida (Trailing edge)</text>
+      <text x="410" y="200" fontSize="12" fill="#0284c7">Trailing edge</text>
 
       {/* Angle of attack */}
       <path d="M 50 150 L 200 150" fill="none" stroke="#cbd5e1" strokeWidth="2" />
       <path d="M 150 150 A 50 50 0 0 1 146 156" fill="none" stroke="#f59e0b" strokeWidth="2" />
-      <text x="160" y="145" fontSize="12" fill="#d97706">Ángulo de ataque</text>
+      <text x="160" y="145" fontSize="12" fill="#d97706">Angle of attack</text>
 
       {/* Markers definition */}
       <defs>
@@ -121,18 +119,18 @@ const DragDiagram = () => (
       
       {/* Motion arrow */}
       <path d="M 150 180 L 300 180" fill="none" stroke="#22c55e" strokeWidth="3" markerEnd="url(#arrow-green)" />
-      <text x="200" y="195" fontSize="12" fill="#16a34a" fontWeight="bold">Movimiento</text>
+      <text x="200" y="195" fontSize="12" fill="#16a34a" fontWeight="bold">Motion</text>
 
       {/* Airflow/Drag opposing */}
       <path d="M 380 90 L 280 90" fill="none" stroke="#ef4444" strokeWidth="2" markerEnd="url(#arrow-red)" />
       <path d="M 380 110 L 310 110" fill="none" stroke="#ef4444" strokeWidth="2" markerEnd="url(#arrow-red)" />
       <path d="M 380 130 L 310 130" fill="none" stroke="#ef4444" strokeWidth="2" markerEnd="url(#arrow-red)" />
-      <text x="320" y="75" fontSize="14" fill="#dc2626" fontWeight="bold">Arrastre (Drag)</text>
+      <text x="320" y="75" fontSize="14" fill="#dc2626" fontWeight="bold">Drag</text>
       
       {/* Slipstream/Wake */}
       <path d="M 80 100 Q 50 100 20 120" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,3" />
       <path d="M 80 120 Q 40 130 10 150" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,3" />
-      <text x="10" y="90" fontSize="12" fill="#64748b">Estela (Slipstream)</text>
+      <text x="10" y="90" fontSize="12" fill="#64748b">Slipstream</text>
     </svg>
   </div>
 );
@@ -155,15 +153,6 @@ const VocabularyGrid = ({ items }) => (
   </div>
 );
 
-const KeyIdea = ({ children }) => (
-  <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-    <div className="flex gap-2 items-center mb-1">
-      <Zap className="w-4 h-4 text-blue-600" />
-      <span className="font-bold text-blue-800 text-sm">Idea Clave</span>
-    </div>
-    <p className="text-blue-900 text-sm">{children}</p>
-  </div>
-);
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('theory');
@@ -179,13 +168,13 @@ export default function App() {
             onClick={() => setActiveTab('theory')}
             className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'theory' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
           >
-            Lección Teórica
+            Theoretical Lesson
           </button>
           <button 
             onClick={() => setActiveTab('exercises')}
             className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'exercises' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
           >
-            Ejercicios Prácticos
+            Practical Exercises
           </button>
         </div>
       </div>
@@ -200,32 +189,31 @@ export default function App() {
                 <Wind className="w-64 h-64 -mt-10 -mr-10" />
               </div>
               <div className="relative z-10 max-w-3xl">
-                <h2 className="text-3xl font-bold mb-4">1. Visión General (Overview)</h2>
+                <h2 className="text-3xl font-bold mb-4">1. Overview</h2>
                 <p className="text-blue-100 text-lg leading-relaxed">
-                  Esta lección explica cómo se mueven los fluidos (gases y líquidos), especialmente alrededor de los objetos. Introduce conceptos clave en aerodinámica, tipos de arrastre (drag), comportamiento del flujo y perfiles aerodinámicos (aerofoils) utilizados en el diseño de ingeniería.
+                  This lesson explains how fluids (gases and liquids) move, especially around objects. It introduces key concepts in aerodynamics, types of drag, flow behavior, and aerofoils used in engineering design.
                 </p>
               </div>
             </section>
 
             {/* 2A. Fluid Dynamics */}
-            <Section title="A. Dinámica de Fluidos y Aerodinámica" icon={BookOpen}>
+            <Section title="A. Fluid Dynamics and Aerodynamics" icon={BookOpen}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
                   <p className="text-slate-600 mb-6">
-                    Comprender cómo interactúa el aire con las estructuras es fundamental para la ingeniería de vehículos, edificios y aeronaves.
+                    Understanding how air interacts with structures is fundamental to the engineering of vehicles, buildings, and aircraft.
                   </p>
                   <VocabularyGrid items={[
-                    { term: 'Fluid dynamics', definition: 'Estudio de cómo fluyen los líquidos y gases.' },
-                    { term: 'Aerodynamics', definition: 'Estudio del flujo de aire alrededor de los objetos.' },
-                    { term: 'Airflow', definition: 'Movimiento del aire.' },
-                    { term: 'Wind tunnel', definition: 'Instalación utilizada para probar el flujo de aire alrededor de objetos.' },
-                    { term: 'Computational Fluid Dynamics (CFD)', definition: 'Simulación del flujo de fluidos mediante ordenadores.' }
+                    { term: 'Fluid dynamics', definition: 'Study of how liquids and gases flow.' },
+                    { term: 'Aerodynamics', definition: 'Study of airflow around objects.' },
+                    { term: 'Airflow', definition: 'Movement of air.' },
+                    { term: 'Wind tunnel', definition: 'Facility used to test airflow around objects.' },
+                    { term: 'Computational Fluid Dynamics (CFD)', definition: 'Simulation of fluid flow using computers.' }
                   ]} />
-                  <KeyIdea>Los ingenieros utilizan túneles de viento y CFD para analizar y mejorar los diseños.</KeyIdea>
                 </div>
                 <div className="bg-slate-100 rounded-xl p-6 border border-slate-200 flex flex-col items-center justify-center text-center h-full min-h-[250px]">
                   <Activity className="w-16 h-16 text-blue-400 mb-4" />
-                  <p className="text-sm text-slate-500 font-medium">Representación Conceptual: Malla Digital CFD</p>
+                  <p className="text-sm text-slate-500 font-medium">Conceptual Representation: CFD Digital Mesh</p>
                   <div className="mt-4 grid grid-cols-5 grid-rows-5 gap-1 w-32 h-32 opacity-20">
                     {[...Array(25)].map((_, i) => (
                       <div key={i} className="bg-blue-600 rounded-sm"></div>
@@ -236,9 +224,9 @@ export default function App() {
             </Section>
 
             {/* 2B. Drag */}
-            <Section title="B. Arrastre (Drag) y Resistencia" icon={Wind}>
+            <Section title="B. Drag and Resistance" icon={Wind}>
               <p className="text-slate-600 mb-6 max-w-3xl">
-                El arrastre es la fuerza que se opone al movimiento de un objeto a través de un fluido. Reducir el arrastre es crucial para la eficiencia energética y la velocidad.
+                Drag is the force that opposes the motion of an object through a fluid. Reducing drag is crucial for energy efficiency and speed.
               </p>
               
               <div className="mb-8">
@@ -246,32 +234,31 @@ export default function App() {
               </div>
 
               <VocabularyGrid items={[
-                { term: 'Drag', definition: 'Resistencia causada por el flujo de aire.' },
-                { term: 'Drag coefficient', definition: 'Medida de cuánto arrastre experimenta un objeto.' },
-                { term: 'Streamlined', definition: 'Forma diseñada para reducir el arrastre (aerodinámica).' },
-                { term: 'Form drag', definition: 'Causado por la forma de un objeto.' },
-                { term: 'Skin friction', definition: 'Causado por el aire que fluye sobre una superficie.' },
-                { term: 'Pressure drag', definition: 'Causado por diferencias de presión (frente vs. parte trasera).' },
-                { term: 'Interference drag', definition: 'Causado por la turbulencia de flujos de aire que interactúan.' },
-                { term: 'Slipstream', definition: 'Estela de baja presión detrás de un objeto en movimiento.' }
+                { term: 'Drag', definition: 'Resistance caused by airflow.' },
+                { term: 'Drag coefficient', definition: 'Measure of how much drag an object experiences.' },
+                { term: 'Streamlined', definition: 'Shape designed to reduce drag (aerodynamic).' },
+                { term: 'Form drag', definition: 'Caused by the shape of an object.' },
+                { term: 'Skin friction', definition: 'Caused by air flowing over a surface.' },
+                { term: 'Pressure drag', definition: 'Caused by pressure differences (front vs. back).' },
+                { term: 'Interference drag', definition: 'Caused by the turbulence of interacting airflows.' },
+                { term: 'Slipstream', definition: 'Low-pressure wake behind a moving object.' }
               ]} />
             </Section>
 
             {/* 2C. Flow Types */}
-            <Section title="C. Flujo Laminar vs. Flujo Turbulento" icon={Activity}>
+            <Section title="C. Laminar Flow vs. Turbulent Flow" icon={Activity}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
                 <div>
                   <p className="text-slate-600 mb-6">
-                    La forma en que el aire viaja sobre una superficie determina la eficiencia aerodinámica del diseño.
+                    The way air travels over a surface determines the aerodynamic efficiency of the design.
                   </p>
                   <VocabularyGrid items={[
-                    { term: 'Boundary layer', definition: 'Capa límite: Aire cerca de la superficie de un objeto.' },
-                    { term: 'Laminar flow', definition: 'Flujo de aire suave y ordenado.' },
-                    { term: 'Turbulent flow', definition: 'Flujo de aire irregular y caótico.' },
-                    { term: 'Wake', definition: 'Estela: Aire perturbado detrás de un objeto.' },
-                    { term: 'Vortex', definition: 'Vórtice: Flujo de fluido rotatorio.' }
+                    { term: 'Boundary layer', definition: 'Air close to the surface of an object.' },
+                    { term: 'Laminar flow', definition: 'Smooth and orderly airflow.' },
+                    { term: 'Turbulent flow', definition: 'Irregular and chaotic airflow.' },
+                    { term: 'Wake', definition: 'Disturbed air behind an object.' },
+                    { term: 'Vortex', definition: 'Rotating fluid flow.' }
                   ]} />
-                  <KeyIdea>El flujo turbulento crea más arrastre (drag) y una estela (wake) más grande que el flujo laminar.</KeyIdea>
                 </div>
                 <div className="flex items-center">
                   <FlowDiagram />
@@ -280,9 +267,9 @@ export default function App() {
             </Section>
 
             {/* 2D. Aerofoils */}
-            <Section title="D. Perfiles Aerodinámicos (Aerofoils)" icon={Wind}>
+            <Section title="D. Aerofoils (Airfoils)" icon={Wind}>
               <p className="text-slate-600 mb-6 max-w-3xl">
-                Los perfiles aerodinámicos son formas geométricas diseñadas específicamente para manipular el aire y generar fuerzas útiles como la sustentación o la carga aerodinámica.
+                Aerofoils are geometric shapes specifically designed to manipulate air and generate useful forces such as lift or downforce.
               </p>
 
               <div className="mb-8">
@@ -290,19 +277,18 @@ export default function App() {
               </div>
 
               <VocabularyGrid items={[
-                { term: 'Aerofoil (airfoil)', definition: 'Forma diseñada para controlar el flujo de aire.' },
-                { term: 'Lift', definition: 'Sustentación: Fuerza ascendente generada por el flujo de aire.' },
-                { term: 'Thrust', definition: 'Empuje: Fuerza hacia adelante (ej. de hélices).' },
-                { term: 'Downforce', definition: 'Carga aerodinámica: Fuerza hacia abajo (ej. en coches de carreras).' },
-                { term: 'Leading edge', definition: 'Borde de ataque: Borde frontal de un perfil aerodinámico.' },
-                { term: 'Trailing edge', definition: 'Borde de salida: Borde trasero.' },
-                { term: 'Angle of attack (pitch)', definition: 'Ángulo entre el flujo de aire y el perfil aerodinámico.' }
+                { term: 'Aerofoil (airfoil)', definition: 'Shape designed to control airflow.' },
+                { term: 'Lift', definition: 'Upward force generated by airflow.' },
+                { term: 'Thrust', definition: 'Forward force (e.g., from propellers).' },
+                { term: 'Downforce', definition: 'Downward force (e.g., on racing cars).' },
+                { term: 'Leading edge', definition: 'Front edge of an aerofoil.' },
+                { term: 'Trailing edge', definition: 'Rear edge of an aerofoil.' },
+                { term: 'Angle of attack (pitch)', definition: 'Angle between the airflow and the aerofoil.' }
               ]} />
-              <KeyIdea>El rendimiento de un perfil aerodinámico depende de la velocidad del flujo de aire y del ángulo de ataque.</KeyIdea>
             </Section>
 
             {/* Context Examples */}
-            <Section title="3. Ejemplos en Contexto (Ingeniería)" icon={BookOpen}>
+            <Section title="3. Contextual Examples (Engineering)" icon={BookOpen}>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <ul className="space-y-4">
                   {[
@@ -328,12 +314,12 @@ export default function App() {
         {activeTab === 'exercises' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Ejercicio 1: Emparejamiento (Básico)</h2>
-              <p className="text-slate-500 mb-6">Empareja cada término con su definición correcta mentalmente y revisa tus opciones.</p>
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Exercise 1: Matching </h2>
+              <p className="text-slate-500 mb-6">Mentally match each term with its correct definition and review your choices.</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-slate-700 mb-2">Términos:</h3>
+                  <h3 className="font-semibold text-slate-700 mb-2">Terms:</h3>
                   {['Drag', 'Laminar flow', 'Turbulent flow', 'Aerofoil', 'Lift'].map((term, i) => (
                     <div key={i} className="p-3 bg-blue-50 text-blue-900 font-medium rounded-lg border border-blue-100 shadow-sm text-center">
                       {term}
@@ -341,7 +327,7 @@ export default function App() {
                   ))}
                 </div>
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-slate-700 mb-2">Definiciones:</h3>
+                  <h3 className="font-semibold text-slate-700 mb-2">Definitions:</h3>
                   {[
                     'a. Smooth, orderly airflow',
                     'b. Force opposing motion',
@@ -358,7 +344,7 @@ export default function App() {
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Ejercicio 2: Rellenar Espacios (Intermedio)</h2>
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Exercise 2: Fill in the Blanks </h2>
               <ul className="space-y-6">
                 {[
                   { text: "The study of airflow is called ", blank: "aerodynamics" },
@@ -377,7 +363,7 @@ export default function App() {
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Ejercicio 3: Uso Contextual (Avanzado)</h2>
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Exercise 3: Contextual Use </h2>
               <ul className="space-y-6">
                 {[
                   { text: "A car designed to reduce air resistance is ", blank: "streamlined" },

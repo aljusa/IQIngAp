@@ -1,338 +1,448 @@
 import React, { useState } from 'react';
-import { Settings, RefreshCw, PenTool, BookOpen, CheckCircle, ArrowRight, Cogs } from 'lucide-react';
+import { Settings, RefreshCcw, ArrowsUpFromLine, MoveDiagonal, CornerDownRight, CircleSlash, ArrowRightLeft, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 
-// --- COMPONENTES VISUALES ---
-
-// 1. Animación de Engranajes Básicos (Meshing)
-const BasicGearsVisual = () => (
-  <div className="flex items-center justify-center p-8 bg-slate-50 rounded-xl border border-slate-200">
-    <div className="relative flex items-center">
-      {/* Engranaje Conductor (Driver) */}
-      <div className="flex flex-col items-center mr-[-10px] z-10">
-        <Settings 
-          size={80} 
-          className="text-blue-600 animate-[spin_4s_linear_infinite]" 
-          strokeWidth={1.5}
-        />
-        <span className="mt-2 text-sm font-semibold text-blue-700">Driver (Input)</span>
-      </div>
-      {/* Engranaje Conducido (Follower) */}
-      <div className="flex flex-col items-center">
-        <Settings 
-          size={80} 
-          className="text-slate-600 animate-[spin_4s_linear_infinite_reverse]" 
-          strokeWidth={1.5}
-        />
-        <span className="mt-2 text-sm font-semibold text-slate-700">Follower (Output)</span>
-      </div>
-    </div>
-  </div>
-);
-
-// 2. Diagrama de Relación de Engranajes (Gear Ratio)
-const GearRatioVisual = () => (
-  <div className="flex flex-col items-center justify-center p-8 bg-blue-50 rounded-xl border border-blue-100">
-    <div className="flex items-center gap-4 relative">
-      <div className="flex flex-col items-center">
-        <Settings 
-          size={60} 
-          className="text-amber-500 animate-[spin_2s_linear_infinite]" 
-        />
-        <div className="text-center mt-3">
-          <p className="font-bold text-amber-700">Driver</p>
-          <p className="text-xs text-amber-600">20 teeth</p>
-          <p className="text-xs font-mono bg-amber-100 px-2 py-1 rounded mt-1">3 Rotations</p>
-        </div>
-      </div>
-      
-      <ArrowRight className="text-blue-300" size={32} />
-      
-      <div className="flex flex-col items-center">
-        <Settings 
-          size={120} 
-          className="text-indigo-600 animate-[spin_6s_linear_infinite_reverse]" 
-          strokeWidth={1}
-        />
-        <div className="text-center mt-3">
-          <p className="font-bold text-indigo-700">Follower</p>
-          <p className="text-xs text-indigo-600">60 teeth</p>
-          <p className="text-xs font-mono bg-indigo-100 px-2 py-1 rounded mt-1">1 Rotation</p>
-        </div>
-      </div>
-    </div>
-    <div className="mt-6 bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-100 w-full max-w-md text-center">
-      <p className="text-lg font-bold text-slate-800">Ratio = 60 / 20 = <span className="text-blue-600">3:1</span></p>
-      <p className="text-sm text-slate-500 mt-1">Mechanical Advantage Visualized</p>
-    </div>
-  </div>
-);
-
-// 3. Tipos de Engranajes Visual
-const GearTypesVisual = () => {
-  const types = [
-    { name: 'Spur Gear', desc: 'Straight teeth, simplest design.', icon: <Settings size={40} className="text-slate-700" /> },
-    { name: 'Helical Gear', desc: 'Angled teeth, smoother operation.', icon: <RefreshCw size={40} className="text-blue-600" /> },
-    { name: 'Bevel Gear', desc: 'Transmits motion at an angle (90°).', icon: <div className="transform rotate-45"><Settings size={40} className="text-amber-600" /></div> },
-    { name: 'Worm Gear', desc: 'Reduces speed significantly, one-way.', icon: <div className="flex"><div className="w-8 h-2 bg-red-500 rounded mt-4"></div><Settings size={40} className="text-red-500" /></div> }
-  ];
-
+// --- CUSTOM GEAR VISUALIZATION COMPONENTS ---
+const GearSystem = ({ gears }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {types.map((type, idx) => (
-        <div key={idx} className="flex items-center p-4 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <div className="mr-4 bg-slate-50 p-3 rounded-full border border-slate-100">
-            {type.icon}
+    <div className="flex items-center justify-center p-8 bg-slate-50 rounded-xl border border-slate-200 shadow-inner overflow-hidden">
+      <style>{`
+        @keyframes spin-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-ccw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+        .spin-cw { animation: spin-cw linear infinite; }
+        .spin-ccw { animation: spin-ccw linear infinite; }
+      `}</style>
+      <div className="flex items-center justify-center space-x-[-10px]">
+        {gears.map((gear, index) => (
+          <div key={index} className="flex flex-col items-center">
+            <Settings 
+              className={`${gear.direction === 'cw' ? 'spin-cw' : 'spin-ccw'}`} 
+              style={{ 
+                width: gear.size, 
+                height: gear.size, 
+                color: gear.color,
+                animationDuration: `${gear.speed}s` 
+              }} 
+            />
+            {gear.label && <span className="mt-2 text-xs font-bold text-slate-600 bg-white px-2 py-1 rounded shadow-sm">{gear.label}</span>}
           </div>
-          <div>
-            <h4 className="font-bold text-slate-800">{type.name}</h4>
-            <p className="text-xs text-slate-500 mt-1">{type.desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-
-// --- COMPONENTES DE EJERCICIOS ---
-
-const ExercisesSection = () => {
-  const [activeTab, setActiveTab] = useState(1);
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-
-  const handleSelect = (qId, option) => {
-    setAnswers(prev => ({ ...prev, [qId]: option }));
-  };
-
-  const checkAnswers = () => setShowResults(true);
-  const reset = () => { setAnswers({}); setShowResults(false); };
-
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-8">
-      <div className="bg-slate-800 p-4 text-white flex items-center gap-2">
-        <PenTool size={20} />
-        <h2 className="text-xl font-bold">4. Exercises & Practice</h2>
-      </div>
-      
-      <div className="flex border-b border-slate-200 bg-slate-50">
-        {[1, 2, 3].map(num => (
-          <button 
-            key={num}
-            onClick={() => setActiveTab(num)}
-            className={`px-6 py-3 font-medium text-sm flex-1 ${activeTab === num ? 'bg-white border-b-2 border-blue-600 text-blue-700' : 'text-slate-500 hover:text-slate-800'}`}
-          >
-            Exercise {num}
-          </button>
         ))}
       </div>
-
-      <div className="p-6">
-        {activeTab === 1 && (
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg mb-4">Matching (Basic)</h3>
-            <p className="text-sm text-slate-600 mb-4">Match each term with its correct definition (Select the letter).</p>
-            {[
-              { id: 'q1', term: 'Gear', ans: 'd' },
-              { id: 'q2', term: 'Shaft', ans: 'c' },
-              { id: 'q3', term: 'Driver', ans: 'b' },
-              { id: 'q4', term: 'Follower', ans: 'a' },
-              { id: 'q5', term: 'Idler gear', ans: 'e' }
-            ].map(q => (
-              <div key={q.id} className="flex items-center justify-between bg-slate-50 p-3 rounded border border-slate-100">
-                <span className="font-medium text-slate-800 w-1/3">{q.term}</span>
-                <select 
-                  className={`border rounded p-1 w-2/3 ${showResults ? (answers[q.id] === q.ans ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500') : 'border-slate-300'}`}
-                  value={answers[q.id] || ''}
-                  onChange={(e) => handleSelect(q.id, e.target.value)}
-                  disabled={showResults}
-                >
-                  <option value="">Select definition...</option>
-                  <option value="a">a. Gear that is driven</option>
-                  <option value="b">b. Gear that provides motion</option>
-                  <option value="c">c. Rotating rod transmitting motion</option>
-                  <option value="d">d. Wheel with teeth</option>
-                  <option value="e">e. Gear that changes direction only</option>
-                </select>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Similar structures could be built for Exercise 2 and 3, keeping it simple for the demo */}
-        {activeTab !== 1 && (
-          <div className="text-center py-12 text-slate-500">
-            <BookOpen size={48} className="mx-auto mb-4 opacity-20" />
-            <p>Interactive module for Exercise {activeTab} is available in the full version.</p>
-            <p className="text-sm mt-2">Refer to the text content above for the questions.</p>
-          </div>
-        )}
-
-        {activeTab === 1 && (
-          <div className="mt-6 flex justify-end gap-3">
-            {showResults ? (
-              <button onClick={reset} className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors font-medium">Try Again</button>
-            ) : (
-              <button onClick={checkAnswers} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2">
-                <CheckCircle size={18} /> Check Answers
-              </button>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 };
 
-
-// --- APLICACIÓN PRINCIPAL ---
-
+// --- MAIN APPLICATION COMPONENT ---
 export default function App() {
+  const [activeTab, setActiveTab] = useState('concepts');
+
+  // Exercise 1 State
+  const [ex1Answers, setEx1Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
+  const [ex1Results, setEx1Results] = useState(null);
+  const ex1Correct = { q1: 'E', q2: 'A', q3: 'C', q4: 'B', q5: 'D' };
+
+  // Exercise 2 State
+  const [ex2Answers, setEx2Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
+  const [ex2Results, setEx2Results] = useState(null);
+  const ex2Correct = { q1: 'gear train', q2: 'driveshaft', q3: 'follower', q4: 'idler gear', q5: 'gearbox' };
+
+  // Exercise 3 State
+  const [ex3Answers, setEx3Answers] = useState({ q1: '', q2: '', q3: '', q4: '', q5: '' });
+  const [ex3Results, setEx3Results] = useState(null);
+  const ex3Correct = { q1: 'worm gear', q2: 'gear train', q3: 'helical gear', q4: 'idler gear', q5: 'gear ratio' };
+
+  const checkEx1 = () => {
+    let results = {};
+    Object.keys(ex1Correct).forEach(key => results[key] = ex1Answers[key] === ex1Correct[key]);
+    setEx1Results(results);
+  };
+
+  const checkEx2 = () => {
+    let results = {};
+    Object.keys(ex2Correct).forEach(key => {
+      // Basic normalization for text inputs
+      const normalize = (str) => str.toLowerCase().trim();
+      results[key] = normalize(ex2Answers[key]) === ex2Correct[key];
+    });
+    setEx2Results(results);
+  };
+
+  const checkEx3 = () => {
+    let results = {};
+    Object.keys(ex3Correct).forEach(key => results[key] = ex3Answers[key] === ex3Correct[key]);
+    setEx3Results(results);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-800 selection:bg-blue-200 selection:text-blue-900 pb-12">
+    <div className="min-h-screen bg-slate-100 text-slate-800 font-sans selection:bg-blue-200">
       
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white">
-            <Settings size={24} className="animate-[spin_10s_linear_infinite]" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Transmission 1: Gears</h1>
-            <p className="text-sm text-slate-500 font-medium">Módulo Educativo Interactivo</p>
+      {/* HEADER */}
+      <header className="bg-blue-900 text-white shadow-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Settings className="w-8 h-8 text-blue-300 spin-cw" style={{animationDuration: '10s'}}/>
+            <h1 className="text-2xl font-bold tracking-tight">Engineering English Lesson</h1>
           </div>
         </div>
+        
+       
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 mt-8 space-y-8">
+      {/* MAIN CONTENT */}
+      <main className="max-w-6xl mx-auto px-4 py-8">
         
-        {/* Introducción */}
-        <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-xl shadow-sm">
-          <h2 className="text-lg font-bold text-blue-900 mb-2">1. Overview</h2>
-          <p className="text-blue-800 leading-relaxed">
-            This lesson explains how gears transmit motion and power between shafts, how gear ratios affect speed, and the different types of gear wheels used in engineering systems.
-          </p>
-        </div>
-
-        {/* Sección 1: Vocabulario */}
-        <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1 block">Concepto 1</span>
-              <h2 className="text-2xl font-bold text-slate-800">A. Gears (Basic Vocabulary)</h2>
-            </div>
-          </div>
-          
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-bold text-slate-700 mb-3 border-b pb-2 flex items-center gap-2">
-                <BookOpen size={18}/> Explicación & Términos
-              </h3>
-              <ul className="space-y-3 text-sm text-slate-600">
-                <li><strong className="text-slate-800">Gear wheel:</strong> A rotating wheel with teeth (cogs).</li>
-                <li><strong className="text-slate-800">Teeth / Mesh:</strong> Projections that interlock / When gear teeth fit together.</li>
-                <li><strong className="text-slate-800">Shaft / Driveshaft:</strong> A rotating rod / Shaft receiving power.</li>
-                <li><strong className="text-slate-800">Driver vs Follower:</strong> Gear providing motion vs Gear driven by driver.</li>
-                <li><strong className="text-slate-800">Idler gear:</strong> Changes direction without affecting speed.</li>
-              </ul>
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800 font-medium"><strong>Key Idea:</strong> When two gears mesh, they rotate in opposite directions and transmit rotary motion.</p>
+       
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+                <BookOpen className="mr-3 text-blue-600" /> Key Concepts
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-xl font-bold text-blue-800 mb-3 border-b pb-2">Gears</h3>
+                  <ul className="space-y-2 list-disc list-inside text-slate-700">
+                    <li>Gears are wheels with teeth (called cogs).</li>
+                    <li>The teeth interlock (fit together) with other gears.</li>
+                    <li>When one gear rotates, the connected gear rotates in the <strong>opposite direction</strong>.</li>
+                    <li>Gears are mounted on shafts to transmit rotary motion.</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2"> Interlocking</h3>
+                  <GearSystem gears={[
+                    { size: 80, speed: 4, direction: 'cw', color: '#3b82f6', label: 'Rotates CW' },
+                    { size: 80, speed: 4, direction: 'ccw', color: '#ef4444', label: 'Rotates CCW' }
+                  ]} />
+                </div>
               </div>
-            </div>
-            
-            <div>
-               <h3 className="font-bold text-slate-700 mb-3 border-b pb-2 flex items-center gap-2">
-                <Settings size={18}/> Sugerencia Visual & Diagrama
-              </h3>
-              <p className="text-xs text-slate-500 mb-4 italic">Animación de dos engranajes engranados rotando en direcciones opuestas para ilustrar "Driver", "Follower" y el concepto de "Mesh".</p>
-              <BasicGearsVisual />
-            </div>
-          </div>
-        </section>
 
-        {/* Sección 2: Gear Ratios */}
-        <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="p-6 border-b border-slate-100 bg-slate-50">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-1 block">Concepto 2</span>
-            <h2 className="text-2xl font-bold text-slate-800">B. Gear Ratios</h2>
-          </div>
-          
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="order-2 md:order-1">
-              <h3 className="font-bold text-slate-700 mb-3 border-b pb-2 flex items-center gap-2">
-                <Settings size={18}/> Sugerencia Visual & Diagrama
-              </h3>
-              <p className="text-xs text-slate-500 mb-4 italic">Representación de la ventaja mecánica: Un engranaje pequeño (20 dientes) girando rápido para mover un engranaje grande (60 dientes) lentamente. Relación 3:1.</p>
-              <GearRatioVisual />
-            </div>
-
-            <div className="order-1 md:order-2">
-              <h3 className="font-bold text-slate-700 mb-3 border-b pb-2 flex items-center gap-2">
-                <BookOpen size={18}/> Explicación & Términos
-              </h3>
-              <ul className="space-y-3 text-sm text-slate-600 mb-4">
-                <li><strong className="text-slate-800">Gear ratio:</strong> Ratio of the number of teeth between driver and follower.</li>
-                <li><strong className="text-slate-800">Speeds:</strong> Input speed (driver) vs Output speed (follower).</li>
-                <li><strong className="text-slate-800">Mechanical advantage:</strong> Change in speed or force due to gear ratio.</li>
-                <li><strong className="text-slate-800">Gearbox:</strong> System containing multiple gear ratios (Manual or Automatic).</li>
-              </ul>
-              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg font-mono text-sm text-indigo-900">
-                <strong>Example:</strong><br/>
-                Driver: 20 teeth<br/>
-                Follower: 60 teeth<br/>
-                <span className="bg-indigo-200 px-1 rounded">Gear ratio = 3:1</span><br/>
-                → Driver rotates 3 times for 1 rotation of follower
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-xl font-bold text-blue-800 mb-3 border-b pb-2">Drive System & Gear Train</h3>
+                  <ul className="space-y-2 list-disc list-inside text-slate-700">
+                    <li><strong>Drive:</strong> Rotary motion transmitted from one shaft to another.</li>
+                    <li><strong>Driveshaft / Input shaft:</strong> A shaft connected to the engine or motor.</li>
+                    <li><strong>Driver gear:</strong> The gear attached to the driveshaft.</li>
+                    <li><strong>Follower gear:</strong> The gear that meshes with and is driven by the driver.</li>
+                  </ul>
+                  <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                    <p className="text-amber-900 font-medium"><strong>Transmission System (Gear Train):</strong> Starts with an input shaft and ends with an output shaft. It may include <strong>idler gears</strong> which change direction of rotation without changing speed ratio.</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2"> Idler Gear</h3>
+                  <GearSystem gears={[
+                    { size: 60, speed: 3, direction: 'cw', color: '#10b981', label: 'Driver (CW)' },
+                    { size: 60, speed: 3, direction: 'ccw', color: '#64748b', label: 'Idler (CCW)' },
+                    { size: 60, speed: 3, direction: 'cw', color: '#f59e0b', label: 'Follower (CW)' }
+                  ]} />
+                  <p className="text-xs text-slate-500 text-center mt-2 italic">Notice how the driver and follower now rotate in the same direction.</p>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+                <RefreshCcw className="mr-3 text-blue-600" /> Gear Ratios
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <p className="text-lg text-slate-700 mb-4">
+                    A gear ratio compares the number of teeth between two gears.
+                  </p>
+                  
+                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-6">
+                    <h4 className="font-bold text-slate-800 mb-2">Example Ratio: 3:1</h4>
+                    <ul className="space-y-2 text-slate-700">
+                      <li><strong>Driver:</strong> 20 teeth</li>
+                      <li><strong>Follower:</strong> 60 teeth</li>
+                    </ul>
+                    <p className="mt-4 text-blue-700 font-medium bg-blue-50 p-3 rounded">
+                      This means: The Driver rotates 3 times → while the follower rotates once.
+                    </p>
+                  </div>
 
-        {/* Sección 3: Tipos de Engranajes */}
-        <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="p-6 border-b border-slate-100 bg-slate-50">
-             <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1 block">Concepto 3</span>
-            <h2 className="text-2xl font-bold text-slate-800">C. Types of Gear Wheel</h2>
+                  <h3 className="text-xl font-bold text-blue-800 mb-3 border-b pb-2">Key Terms</h3>
+                  <ul className="space-y-2 list-disc list-inside text-slate-700">
+                    <li><strong>Input speed:</strong> Speed of the driver gear</li>
+                    <li><strong>Output speed:</strong> Speed of the follower gear</li>
+                    <li className="text-amber-600 font-semibold">Larger follower gear → lower output speed</li>
+                  </ul>
+
+                  <h3 className="text-xl font-bold text-blue-800 mt-6 mb-3 border-b pb-2">Gearboxes</h3>
+                  <p className="text-slate-700">A gearbox allows changing gear ratios.</p>
+                  <ul className="space-y-2 list-disc list-inside text-slate-700 mt-2">
+                    <li><strong>Manual gearbox:</strong> Changed by a person</li>
+                    <li><strong>Automatic gearbox:</strong> Changes gears automatically</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2 text-center"> 3:1 Ratio</h3>
+                  <div className="bg-slate-50 p-8 rounded-xl border border-slate-200 shadow-inner flex flex-col items-center">
+                     {/* Conceptual 3:1 representation */}
+                     <div className="flex items-center justify-center space-x-[-15px]">
+                        <div className="flex flex-col items-center">
+                          <Settings className="spin-cw text-blue-500" style={{ width: 50, height: 50, animationDuration: '2s' }} />
+                          <span className="mt-2 text-xs font-bold text-slate-600 bg-white px-2 py-1 rounded shadow">Driver (Fast)</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <Settings className="spin-ccw text-red-500" style={{ width: 150, height: 150, animationDuration: '6s' }} />
+                          <span className="mt-2 text-xs font-bold text-slate-600 bg-white px-2 py-1 rounded shadow">Follower (Slow)</span>
+                        </div>
+                     </div>
+                     <p className="mt-6 text-sm text-slate-500 text-center max-w-sm">
+                       The smaller driver gear must complete 3 full rotations to turn the large follower gear exactly 1 time.
+                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div className="p-6">
-             <p className="text-sm text-slate-600 mb-6 max-w-3xl">
-              <strong>Explicación:</strong> Different gear types are used depending on direction, speed, and smoothness requirements. Below are the visual representations and descriptions of the main types discussed.
-            </p>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+                <Settings className="mr-3 text-blue-600" /> Types of Gear Wheels
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Type Cards */}
+                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-400 transition-colors group">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <ArrowsUpFromLine />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Spur Gears</h3>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <li>Straight teeth</li>
+                    <li>Simple design</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-400 transition-colors group">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <ArrowRightLeft />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Helical Gears</h3>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <li>Curved/Angled teeth</li>
+                    <li>Smoother operation</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-400 transition-colors group">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <MoveDiagonal />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Bevel Gears</h3>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <li>Transmit motion at an angle</li>
+                    <li>Often used for 90° changes</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-400 transition-colors group">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <CornerDownRight />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Crown Gears</h3>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <li>Transmit motion at 90° to a pinion</li>
+                    <li>Pinion is a small gear</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-400 transition-colors group lg:col-span-2">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
+                    <CircleSlash />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Worm Gears</h3>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <li>Transmit motion at an angle</li>
+                    <li>Provide large speed reduction</li>
+                    <li><strong>Allow one-way drive</strong> (cannot reverse motion)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">Vocabulary List</h2>
+              
+              <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-blue-50 text-blue-900">
+                      <th className="px-6 py-4 font-bold border-b border-blue-100 w-1/3">Term</th>
+                      <th className="px-6 py-4 font-bold border-b border-blue-100">Definition</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {[
+                      { term: 'Gear', def: 'A toothed wheel used to transmit motion' },
+                      { term: 'Cog', def: 'A tooth on a gear' },
+                      { term: 'Interlock', def: 'Fit together securely' },
+                      { term: 'Shaft', def: 'A rotating rod that transmits motion' },
+                      { term: 'Driveshaft', def: 'Shaft connected to a power source' },
+                      { term: 'Driver', def: 'Gear that provides motion' },
+                      { term: 'Follower', def: 'Gear that receives motion' },
+                      { term: 'Gear train', def: 'System of multiple gears' },
+                      { term: 'Gear ratio', def: 'Ratio of teeth between gears' },
+                      { term: 'Idler gear', def: 'Gear that changes direction only' },
+                      { term: 'Gearbox', def: 'Device for changing gear ratios' },
+                      { term: 'Spur gear', def: 'Gear with straight teeth' },
+                      { term: 'Helical gear', def: 'Gear with angled teeth' },
+                      { term: 'Bevel gear', def: 'Gear for angled transmission' },
+                      { term: 'Worm gear', def: 'Gear system with high reduction' }
+                    ].map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4 font-semibold text-slate-800">{row.term}</td>
+                        <td className="px-6 py-4 text-slate-600">{row.def}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             
-            <div className="mb-4 text-xs text-slate-500 italic">
-              <strong>Sugerencia Visual:</strong> Tarjetas con iconos representativos de la disposición geométrica de cada tipo de engranaje (Recto, Helicoidal, Cónico, Tornillo Sin Fin).
+            {/* EXERCISE 1 */}
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Exercise 1: Matching Terms </h2>
+              <p className="text-slate-600 mb-6">Match each term to its correct definition.</p>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  {[
+                    { id: 'q1', term: 'Driver' },
+                    { id: 'q2', term: 'Idler gear' },
+                    { id: 'q3', term: 'Gear ratio' },
+                    { id: 'q4', term: 'Shaft' },
+                    { id: 'q5', term: 'Follower' }
+                  ].map((q) => (
+                    <div key={q.id} className="flex items-center space-x-4 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                      <span className="font-bold w-24 text-blue-900">{q.term}</span>
+                      <select 
+                        className={`flex-1 p-2 rounded border focus:ring-2 focus:ring-blue-500 outline-none
+                          ${ex1Results && ex1Results[q.id] ? 'border-green-500 bg-green-50' : ''}
+                          ${ex1Results && !ex1Results[q.id] ? 'border-red-500 bg-red-50' : ''}
+                        `}
+                        value={ex1Answers[q.id]}
+                        onChange={(e) => setEx1Answers({...ex1Answers, [q.id]: e.target.value})}
+                      >
+                        <option value="">Select definition...</option>
+                        <option value="A">A. Changes direction but not speed</option>
+                        <option value="B">B. Rotating rod transmitting motion</option>
+                        <option value="C">C. Relationship between gear teeth counts</option>
+                        <option value="D">D. Gear that receives motion</option>
+                        <option value="E">E. Gear that provides motion</option>
+                      </select>
+                      {ex1Results && (ex1Results[q.id] ? <CheckCircle className="text-green-500" /> : <XCircle className="text-red-500" />)}
+                    </div>
+                  ))}
+                  <button onClick={checkEx1} className="mt-4 px-6 py-2 bg-blue-600 text-white font-bold rounded shadow hover:bg-blue-700 transition-colors">
+                    Check Answers
+                  </button>
+                </div>
+                
+                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                  <h4 className="font-bold text-blue-900 mb-4">Definitions Key</h4>
+                  <ul className="space-y-3 text-sm text-blue-800">
+                    <li><strong>A.</strong> Changes direction but not speed</li>
+                    <li><strong>B.</strong> Rotating rod transmitting motion</li>
+                    <li><strong>C.</strong> Relationship between gear teeth counts</li>
+                    <li><strong>D.</strong> Gear that receives motion</li>
+                    <li><strong>E.</strong> Gear that provides motion</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
-            <GearTypesVisual />
+            {/* EXERCISE 2 */}
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Exercise 2: Fill in the Blanks </h2>
+              <p className="text-slate-600 mb-6">Type the correct vocabulary word.</p>
+
+              <div className="space-y-6 max-w-3xl">
+                {[
+                  { id: 'q1', pre: '1. Gears transmit motion through a', post: '.' },
+                  { id: 'q2', pre: '2. A gear attached to the engine is called the', post: '.' },
+                  { id: 'q3', pre: '3. The gear that receives motion is the', post: '.' },
+                  { id: 'q4', pre: '4. A', post: 'can change the direction of rotation without changing speed.' },
+                  { id: 'q5', pre: '5. A', post: 'allows gears to be changed during operation.' }
+                ].map((q) => (
+                  <div key={q.id} className="flex items-center flex-wrap gap-3">
+                    <span className="text-slate-700">{q.pre}</span>
+                    <div className="relative flex items-center">
+                      <input 
+                        type="text"
+                        className={`px-3 py-1 border-b-2 bg-slate-50 focus:bg-blue-50 focus:border-blue-600 outline-none w-40 transition-colors
+                          ${ex2Results && ex2Results[q.id] ? 'border-green-500 text-green-700' : 'border-slate-300'}
+                          ${ex2Results && !ex2Results[q.id] ? 'border-red-500 text-red-700' : ''}
+                        `}
+                        value={ex2Answers[q.id]}
+                        onChange={(e) => setEx2Answers({...ex2Answers, [q.id]: e.target.value})}
+                      />
+                      {ex2Results && (
+                        <span className="absolute -right-8">
+                          {ex2Results[q.id] ? <CheckCircle className="text-green-500 w-5 h-5" /> : <XCircle className="text-red-500 w-5 h-5" />}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-slate-700">{q.post}</span>
+                  </div>
+                ))}
+                <button onClick={checkEx2} className="px-6 py-2 bg-blue-600 text-white font-bold rounded shadow hover:bg-blue-700 transition-colors">
+                  Check Answers
+                </button>
+              </div>
+            </div>
+
+            {/* EXERCISE 3 */}
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Exercise 3: Contextual Usage </h2>
+              <p className="text-slate-600 mb-6">Choose the correct term for each engineering situation.</p>
+
+              <div className="space-y-4 max-w-4xl">
+                {[
+                  { id: 'q1', text: 'An engineer needs a system to reduce speed significantly and prevent reverse motion →' },
+                  { id: 'q2', text: 'A system of multiple gears transferring motion from input to output →' },
+                  { id: 'q3', text: 'A gear with angled teeth for smoother operation →' },
+                  { id: 'q4', text: 'A gear used only to reverse rotation direction →' },
+                  { id: 'q5', text: 'The relationship between input speed and output speed →' }
+                ].map((q) => (
+                  <div key={q.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-slate-50 p-4 rounded-lg border border-slate-200 gap-4">
+                    <span className="text-slate-700 flex-1">{q.text}</span>
+                    <div className="flex items-center space-x-3 w-full sm:w-64">
+                      <select 
+                        className={`flex-1 p-2 rounded border focus:ring-2 focus:ring-blue-500 outline-none
+                          ${ex3Results && ex3Results[q.id] ? 'border-green-500 bg-green-50' : ''}
+                          ${ex3Results && !ex3Results[q.id] ? 'border-red-500 bg-red-50' : ''}
+                        `}
+                        value={ex3Answers[q.id]}
+                        onChange={(e) => setEx3Answers({...ex3Answers, [q.id]: e.target.value})}
+                      >
+                        <option value="">Select term...</option>
+                        <option value="helical gear">helical gear</option>
+                        <option value="idler gear">idler gear</option>
+                        <option value="worm gear">worm gear</option>
+                        <option value="gear train">gear train</option>
+                        <option value="gear ratio">gear ratio</option>
+                      </select>
+                      {ex3Results && (ex3Results[q.id] ? <CheckCircle className="text-green-500 w-6 h-6 shrink-0" /> : <XCircle className="text-red-500 w-6 h-6 shrink-0" />)}
+                    </div>
+                  </div>
+                ))}
+                <button onClick={checkEx3} className="mt-4 px-6 py-2 bg-blue-600 text-white font-bold rounded shadow hover:bg-blue-700 transition-colors">
+                  Check Answers
+                </button>
+              </div>
+            </div>
+
           </div>
-        </section>
-
-        {/* Contexto y Ejercicios */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          {/* Example Sentences */}
-          <div className="md:col-span-1 bg-slate-800 text-slate-300 rounded-xl p-6 shadow-md">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <BookOpen size={20} className="text-blue-400"/> 3. Example Sentences
-            </h3>
-            <ul className="space-y-4 text-sm font-medium">
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">The gear wheels mesh to transmit motion between shafts.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">The driver rotates the follower in the opposite direction.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">The gear ratio determines the output speed.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">A gearbox allows multiple speed settings.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">Helical gears provide smoother operation than spur gears.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">A worm gear reduces speed and increases torque.</li>
-              <li className="pl-4 border-l-2 border-blue-500 hover:text-white transition-colors">An idler gear changes the direction of rotation.</li>
-            </ul>
-          </div>
-
-          {/* Interactive Exercises */}
-          <div className="md:col-span-2">
-            <ExercisesSection />
-          </div>
-
-        </div>
-
       </main>
     </div>
   );

@@ -141,7 +141,7 @@ const ConceptSection = ({ title, explanation, visualTitle, children }) => (
       </div>
       <div className="mt-6 border-t border-slate-100 pt-6">
         <h3 className="text-sm font-bold text-indigo-600 uppercase tracking-wider mb-4">
-          Visual Simulation: {visualTitle}
+         {visualTitle}
         </h3>
         {children}
       </div>
@@ -200,7 +200,7 @@ const QuizSection = () => {
         
         {/* Exercise 1 */}
         <div className="bg-slate-50 p-6 rounded-xl">
-          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 1: Matching (Basic)</h3>
+          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 1: Matching </h3>
           <p className="text-sm text-slate-500 mb-4">Options: a) Stored energy, b) Energy of movement, c) Rate of doing work, d) Energy used to perform a task, e) Percentage of useful output energy</p>
           <div className="space-y-3">
             {[
@@ -232,7 +232,7 @@ const QuizSection = () => {
 
         {/* Exercise 2 */}
         <div className="bg-slate-50 p-6 rounded-xl">
-          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 2: Fill in the Blanks (Intermediate)</h3>
+          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 2: Fill in the Blanks </h3>
           <div className="space-y-3 text-slate-700">
             <div>
               1. Energy of motion is called <input type="text" className="border-b-2 border-slate-300 bg-transparent px-2 w-24 focus:border-indigo-500 outline-none" value={answers.fb1} onChange={e => handleSelect('fb1', e.target.value)} /> energy. {renderFeedback('fb1')}
@@ -254,7 +254,7 @@ const QuizSection = () => {
 
         {/* Exercise 3 */}
         <div className="bg-slate-50 p-6 rounded-xl">
-          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 3: Contextual Usage (Advanced)</h3>
+          <h3 className="font-bold text-lg mb-4 text-slate-800">Exercise 3: Contextual Usage </h3>
           <div className="space-y-3 text-slate-700">
             <div>
               1. A battery converts chemical energy into 
@@ -318,9 +318,7 @@ export default function App() {
       <header className="bg-indigo-900 text-white py-16 px-6 mb-12 shadow-lg">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">Engineering Principles: Energy</h1>
-          <p className="text-lg md:text-xl text-indigo-200 max-w-2xl">
-            An interactive module introducing different forms of energy, conversion in engineering systems, efficiency, work, and power.
-          </p>
+        
         </div>
       </header>
 

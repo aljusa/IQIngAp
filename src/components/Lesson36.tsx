@@ -22,7 +22,7 @@ const PhaseChangeDiagram = () => {
     <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 my-6">
       <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
         <Activity className="text-blue-500" />
-        Visual Diagram: Changes of State
+        Changes of State
       </h3>
       
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -153,7 +153,7 @@ const ExercisesSection = () => {
       <div className="space-y-8">
         {/* Exercise 1 */}
         <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg mb-3">Exercise 1: Matching (Basic)</h3>
+          <h3 className="font-bold text-lg mb-3">Exercise 1: Matching </h3>
           <ul className="space-y-3">
             {[
               { term: "Conduction", ans: "c. Heat transfer through solids" },
@@ -175,7 +175,7 @@ const ExercisesSection = () => {
 
         {/* Exercise 2 */}
         <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg mb-3">Exercise 2: Fill in the Blanks (Intermediate)</h3>
+          <h3 className="font-bold text-lg mb-3">Exercise 2: Fill in the Blanks </h3>
           <ul className="space-y-3 text-slate-700">
             <li>1. The energy needed to raise temperature depends on <span className={showAnswers ? 'text-green-600 font-bold' : 'text-slate-400 font-bold'}>{showAnswers ? "specific" : "______"}</span> heat capacity.</li>
             <li>2. Heat transfer in solids is called <span className={showAnswers ? 'text-green-600 font-bold' : 'text-slate-400 font-bold'}>{showAnswers ? "conduction" : "______"}</span>.</li>
@@ -187,7 +187,7 @@ const ExercisesSection = () => {
 
         {/* Exercise 3 */}
         <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg mb-3">Exercise 3: Contextual Usage (Advanced)</h3>
+          <h3 className="font-bold text-lg mb-3">Exercise 3: Contextual Usage </h3>
           <ul className="space-y-3 text-slate-700">
             <li>1. A metal rod heats at one end and transfers heat along its length by <span className={showAnswers ? 'text-green-600 font-bold' : 'text-slate-400 font-bold'}>{showAnswers ? "conduction" : "______"}</span>.</li>
             <li>2. Boiling water forms bubbles due to <span className={showAnswers ? 'text-green-600 font-bold' : 'text-slate-400 font-bold'}>{showAnswers ? "convection" : "______"}</span>.</li>
@@ -217,9 +217,7 @@ export default function App() {
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
             Heat and Temperature
           </h1>
-          <p className="text-lg md:text-xl text-red-50 max-w-2xl leading-relaxed">
-            This lesson explains how heat and temperature are measured, how materials change state, and how heat is transferred. The focus is on key engineering vocabulary related to thermal systems and energy transfer.
-          </p>
+          
         </div>
       </header>
 

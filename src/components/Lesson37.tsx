@@ -8,16 +8,13 @@ const Header = () => (
         <Settings className="h-10 w-10 text-blue-300" />
         Fluid Containment
       </h1>
-      <p className="text-xl text-blue-100 max-w-2xl leading-relaxed">
-        This lesson explains how fluids (liquids and gases) are contained, transported, and controlled in engineering systems. It introduces key vocabulary related to pipes, tanks, and flow devices.
-      </p>
+    
     </div>
   </header>
 );
 
 const VisualPipes = () => (
   <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6 relative overflow-hidden">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Inclinación por Gravedad (Fall)</h4>
     <svg viewBox="0 0 400 150" className="w-full max-w-md drop-shadow-md">
       {/* Horizontal Pipe (Main) */}
       <path d="M 20 40 L 200 40 L 200 70 L 20 70 Z" fill="#94a3b8" />
@@ -42,7 +39,6 @@ const VisualPipes = () => (
 
 const VisualTanks = () => (
   <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Recipientes a Presión</h4>
     <div className="flex gap-12 items-end">
       {/* Open Tank */}
       <div className="flex flex-col items-center">
@@ -67,7 +63,6 @@ const VisualTanks = () => (
 
 const VisualMachines = () => (
   <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-6">
-    <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Visualización: Control de Flujo</h4>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-2xl">
       <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
         <div className="p-3 bg-blue-100 text-blue-600 rounded-full mb-2"><Droplets size={24}/></div>
@@ -166,13 +161,7 @@ const VocabularySection = () => {
                 ))}
               </ul>
             </div>
-            <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
-              <div className="flex items-center gap-2 mb-1">
-                <Lightbulb className="w-5 h-5 text-amber-600" />
-                <span className="font-bold text-amber-800">Key Idea</span>
-              </div>
-              <p className="text-amber-900 text-sm">{sec.keyIdea}</p>
-            </div>
+           
           </div>
           <div className="bg-slate-50 md:w-1/2 p-8 flex items-center justify-center border-t md:border-t-0 md:border-l border-slate-100">
             {sec.visual}
@@ -198,7 +187,7 @@ const ExamplesSection = () => {
   return (
     <div className="mt-12 bg-blue-50 p-8 rounded-2xl">
       <h2 className="text-2xl font-bold text-blue-900 mb-6 flex items-center gap-2">
-        <Settings className="w-6 h-6" /> Example Sentences (Context)
+        <Settings className="w-6 h-6" /> Example Sentences 
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {examples.map((ex, idx) => (
@@ -234,7 +223,7 @@ const ExercisesSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Ex 1 */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2">1: Matching (Basic)</h3>
+          <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2">1: Matching </h3>
           <ul className="space-y-4">
             {[
               { term: "Pipe", ans: "d. Rigid tube for fluids" },
@@ -312,15 +301,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
       <Header />
       <main className="max-w-6xl mx-auto px-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-l-4 border-blue-500 mb-10 flex gap-4 items-start">
-           <div className="bg-blue-100 p-2 rounded-full mt-1">
-             <Lightbulb className="w-5 h-5 text-blue-600" />
-           </div>
-           <div>
-             <h3 className="font-bold text-lg mb-1">Engineering Notes</h3>
-             <p className="text-slate-600 text-sm">Fluid systems require proper design for safe and efficient operation. Gravity, pressure, and mechanical devices all control fluid movement. Understanding these terms is essential in mechanical, civil, and process engineering.</p>
-           </div>
-        </div>
+      
         
         <VocabularySection />
         <ExamplesSection />

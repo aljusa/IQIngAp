@@ -97,9 +97,7 @@ const App = () => {
             <Zap className="text-yellow-300" size={32} />
             <h1 className="text-4xl font-extrabold tracking-tight">Circuits and Components</h1>
           </div>
-          <p className="text-xl text-indigo-100 max-w-2xl">
-            A comprehensive guide to electrical pathways, power distribution, and electronic vocabulary for engineering.
-          </p>
+         
         </div>
       </header>
 
@@ -144,9 +142,7 @@ const App = () => {
                     <li><span className="font-bold text-slate-500">Neutral:</span> Returns the current to the source.</li>
                     <li><span className="font-bold text-green-600">Earth:</span> A safety safety path to ground.</li>
                   </ul>
-                  <div className="p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 rounded-lg italic text-sm">
-                    "In parallel circuits, components operate independently; in series circuits, all components share the same path."
-                  </div>
+                  
                 </div>
                 <SeriesParallelDiagram />
               </div>
@@ -308,12 +304,6 @@ const App = () => {
           </div>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="mt-20 border-t border-slate-200 dark:border-slate-800 pt-8 text-center text-slate-500 text-sm">
-        <p>© 2024 Ideastoweb - Educational Platform</p>
-        <p className="mt-1 italic">Transforming academic texts into interactive visual knowledge.</p>
-      </footer>
     </div>
   );
 };

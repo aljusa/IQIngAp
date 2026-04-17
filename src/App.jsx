@@ -185,7 +185,7 @@ function App() {
         <option value="Lesson31">Lesson 31</option>
         <option value="Lesson32">Lesson 32</option>
         <option value="Lesson33">Lesson 33</option>
-      {/*   <option value="Lesson34">Lesson 34</option>
+      <option value="Lesson34">Lesson 34</option>
         <option value="Lesson35">Lesson 35</option>
         <option value="Lesson36">Lesson 36</option>
         <option value="Lesson37">Lesson 37</option>
@@ -196,7 +196,7 @@ function App() {
         <option value="Lesson42">Lesson 42</option>
         <option value="Lesson43">Lesson 43</option>
         <option value="Lesson44">Lesson 44</option>
-        <option value="Lesson45">Lesson 45</option> */}
+        <option value="Lesson45">Lesson 45</option> 
 
       </select>
 

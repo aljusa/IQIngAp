@@ -1,403 +1,447 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, RefreshCw, ChevronRight, CheckCircle2, Info, BookOpen, Layers } from 'lucide-react';
+import { BookOpen, Settings, Activity, List, CheckCircle, ArrowRight } from 'lucide-react';
 
-const TransmissionApp = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [quizScore, setQuizScore] = useState(null);
-  const [answers, setAnswers] = useState({});
+// --- VISUAL COMPONENTS (DIAGRAMS) ---
 
-  // --- Visual Components ---
-
-  const ChainBeltVisual = ({ type = 'chain' }) => {
-    const [rotation, setRotation] = useState(0);
+const PulleysAndChainsDiagram = () => (
+  <div className="flex flex-col md:flex-row gap-8 justify-center items-center p-6 bg-slate-50 rounded-xl border border-slate-200">
+    <div className="flex flex-col items-center">
+      <h4 className="font-semibold text-slate-700 mb-4">Belt Drive (Pulley System)</h4>
+      <svg width="200" height="120" viewBox="0 0 200 120" className="drop-shadow-md">
+        {/* Belt */}
+        <rect x="40" y="30" width="120" height="60" rx="30" fill="none" stroke="#475569" strokeWidth="8" />
+        {/* Pulleys */}
+        <circle cx="40" cy="60" r="26" fill="#94a3b8" />
+        <circle cx="40" cy="60" r="10" fill="#cbd5e1" />
+        <circle cx="160" cy="60" r="26" fill="#94a3b8" />
+        <circle cx="160" cy="60" r="10" fill="#cbd5e1" />
+        {/* Rotation arrows */}
+        <path d="M 25 45 A 20 20 0 0 1 55 45" fill="none" stroke="white" strokeWidth="2" markerEnd="url(#arrow)" />
+      </svg>
+      <p className="text-sm text-slate-500 mt-2 text-center max-w-[200px]">Smooth wheels (pulleys) with a flexible belt. Can slip under heavy loads.</p>
+    </div>
     
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setRotation(prev => (prev + 2) % 360);
-      }, 20);
-      return () => clearInterval(interval);
-    }, []);
-
-    const isChain = type === 'chain';
-
-    return (
-      <div className="flex flex-col items-center bg-slate-50 p-6 rounded-xl border border-slate-200 my-4 shadow-inner">
-        <div className="text-sm font-semibold mb-4 text-slate-500 uppercase tracking-wider">
-          Live Simulation: {isChain ? 'Chain & Sprocket' : 'Belt & Pulley'}
-        </div>
-        <svg width="300" height="150" viewBox="0 0 300 150">
-          {/* Connecting Line (Chain or Belt) */}
-          <path 
-            d="M 80 40 L 220 50 M 80 110 L 220 100" 
-            stroke={isChain ? "#475569" : "#1e293b"} 
-            strokeWidth={isChain ? "4" : "6"}
-            strokeDasharray={isChain ? "10,5" : "0"}
-          />
-          
-          {/* Small Gear/Pulley */}
-          <g transform={`translate(80, 75) rotate(${rotation})`}>
-            <circle cx="0" cy="0" r="35" fill="#94a3b8" stroke="#475569" strokeWidth="2" />
-            <circle cx="0" cy="0" r="5" fill="white" />
-            {isChain && [...Array(12)].map((_, i) => (
-              <rect key={i} x="-4" y="-40" width="8" height="10" fill="#475569" transform={`rotate(${i * 30})`} />
-            ))}
-            {!isChain && <line x1="0" y1="-35" x2="0" y2="35" stroke="#475569" strokeWidth="2" />}
-          </g>
-
-          {/* Large Gear/Pulley */}
-          <g transform={`translate(220, 75) rotate(${rotation * 0.5})`}>
-            <circle cx="0" cy="0" r="50" fill="#64748b" stroke="#334155" strokeWidth="2" />
-            <circle cx="0" cy="0" r="5" fill="white" />
-            {isChain && [...Array(18)].map((_, i) => (
-              <rect key={i} x="-4" y="-55" width="8" height="10" fill="#334155" transform={`rotate(${i * 20})`} />
-            ))}
-            {!isChain && <line x1="-50" y1="0" x2="50" y2="0" stroke="#334155" strokeWidth="2" />}
-          </g>
-        </svg>
-        <p className="mt-4 text-xs text-slate-400 italic">
-          {isChain 
-            ? "Chain Drive: No slip, high force, uses toothed sprockets." 
-            : "Belt Drive: Smooth, allows some slip (unless toothed), uses pulleys."}
-        </p>
-      </div>
-    );
-  };
-
-  const CrankshaftVisual = () => {
-    const [angle, setAngle] = useState(0);
+    <div className="w-px h-32 bg-slate-200 hidden md:block"></div>
     
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setAngle(prev => (prev + 0.05) % (Math.PI * 2));
-      }, 20);
-      return () => clearInterval(interval);
-    }, []);
-
-    const r = 30; // crank radius
-    const l = 80; // conrod length
-    const cx = 150;
-    const cy = 100;
-    
-    const crankX = cx + r * Math.cos(angle);
-    const crankY = cy + r * Math.sin(angle);
-    
-    // Piston position y (approximate)
-    const pistonY = cy - Math.sqrt(l*l - Math.pow(r * Math.cos(angle), 2)) + r * Math.sin(angle);
-
-    return (
-      <div className="flex flex-col items-center bg-slate-900 p-6 rounded-xl border border-slate-700 my-4 shadow-2xl">
-        <div className="text-sm font-semibold mb-4 text-blue-400 uppercase tracking-wider">
-          Conversion: Reciprocating ↔ Rotary
-        </div>
-        <svg width="300" height="200" viewBox="0 0 300 200">
-          {/* Cylinder Walls */}
-          <line x1="120" y1="20" x2="120" y2="100" stroke="#475569" strokeWidth="2" />
-          <line x1="180" y1="20" x2="180" y2="100" stroke="#475569" strokeWidth="2" />
-          
-          {/* Piston */}
-          <rect x="125" y={pistonY - 15} width="50" height="30" rx="2" fill="#94a3b8" />
-          
-          {/* Connecting Rod */}
-          <line x1="150" y1={pistonY} x2={crankX} y2={crankY} stroke="#cbd5e1" strokeWidth="4" strokeLinecap="round" />
-          
-          {/* Crankshaft */}
-          <circle cx={cx} cy={cy} r={r} fill="none" stroke="#334155" strokeDasharray="4" />
-          <line x1={cx} y1={cy} x2={crankX} y2={crankY} stroke="#ef4444" strokeWidth="6" strokeLinecap="round" />
-          <circle cx={cx} cy={cy} r="8" fill="#1e293b" stroke="#475569" strokeWidth="2" />
-        </svg>
-        <div className="grid grid-cols-2 gap-4 mt-4 w-full text-center">
-            <div className="text-xs text-slate-300"><span className="text-blue-400 font-bold">Piston:</span> Reciprocating</div>
-            <div className="text-xs text-slate-300"><span className="text-red-400 font-bold">Crank:</span> Rotary</div>
-        </div>
-      </div>
-    );
-  };
-
-  const CamVisual = () => {
-    const [rotation, setRotation] = useState(0);
-    
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setRotation(prev => (prev + 2) % 360);
-      }, 20);
-      return () => clearInterval(interval);
-    }, []);
-
-    // Cam shape: slightly egg-shaped
-    const rad = (rotation * Math.PI) / 180;
-    const camOffset = Math.sin(rad) > 0 ? Math.sin(rad) * 25 : 0;
-    const followerY = 60 - camOffset;
-
-    return (
-      <div className="flex flex-col items-center bg-white p-6 rounded-xl border border-slate-200 my-4">
-        <div className="text-sm font-semibold mb-4 text-emerald-600 uppercase tracking-wider">
-          Valve Mechanism: Cam & Follower
-        </div>
-        <svg width="200" height="200" viewBox="0 0 200 200">
-          {/* Follower / Valve */}
-          <rect x="95" y={followerY} width="10" height="60" fill="#475569" />
-          <rect x="80" y={followerY - 5} width="40" height="5" fill="#1e293b" />
-          
-          {/* Guide */}
-          <line x1="90" y1="40" x2="90" y2="100" stroke="#cbd5e1" strokeWidth="2" />
-          <line x1="110" y1="40" x2="110" y2="100" stroke="#cbd5e1" strokeWidth="2" />
-
-          {/* Cam */}
-          <g transform={`translate(100, 140) rotate(${rotation})`}>
-            <path 
-              d="M -30 0 A 30 30 0 1 0 30 0 C 30 -50 0 -60 -30 0" 
-              fill="#10b981" 
-              stroke="#065f46" 
-              strokeWidth="2" 
-            />
-            <circle cx="0" cy="0" r="5" fill="white" />
-          </g>
-        </svg>
-        <p className="mt-2 text-xs text-slate-500">The <strong>Cam</strong> converts rotary motion into timed linear motion.</p>
-      </div>
-    );
-  };
-
-  // --- Handlers ---
-  const handleAnswer = (q, val) => {
-    setAnswers(prev => ({ ...prev, [q]: val }));
-  };
-
-  const checkQuiz = () => {
-    const correct = {
-      q1: 'c',
-      q2: 'a',
-      q3: 'b',
-      q4: 'e',
-      q5: 'd'
-    };
-    let score = 0;
-    Object.keys(correct).forEach(key => {
-      if (answers[key] === correct[key]) score++;
-    });
-    setQuizScore(score);
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-slate-800 to-slate-900 text-white py-12 px-6 shadow-lg">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-2 text-blue-400 mb-2">
-            <Settings className="animate-spin-slow" size={20} />
-            <span className="uppercase tracking-widest text-sm font-bold">Engineering Module</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Transmission II</h1>
-          <p className="text-slate-300 text-lg max-w-2xl leading-relaxed">
-            Exploring the advanced dynamics of motion transfer: from chains and belts to the intricate conversion between linear and circular movement.
-          </p>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <nav className="sticky top-0 bg-white border-b border-slate-200 z-50">
-        <div className="max-w-4xl mx-auto flex overflow-x-auto">
-          {['overview', 'transmitting', 'conversion', 'mechanisms', 'exercises'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-4 text-sm font-semibold whitespace-nowrap transition-colors border-b-2 ${
-                activeTab === tab 
-                  ? 'border-blue-600 text-blue-600' 
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
-      </nav>
-
-      <main className="max-w-4xl mx-auto px-6 py-8">
+    <div className="flex flex-col items-center">
+      <h4 className="font-semibold text-slate-700 mb-4">Chain Drive (Sprockets)</h4>
+      <svg width="200" height="120" viewBox="0 0 200 120" className="drop-shadow-md">
+        {/* Chain */}
+        <rect x="40" y="30" width="120" height="60" rx="30" fill="none" stroke="#334155" strokeWidth="6" strokeDasharray="4 4"/>
+        {/* Sprockets (Toothed) */}
+        <path d="M 40 25 L 45 30 L 55 30 L 60 40 L 65 50 L 60 65 L 50 75 L 30 75 L 20 65 L 15 50 L 20 40 L 30 30 Z" fill="#64748b" />
+        <circle cx="40" cy="60" r="22" fill="#475569" />
+        <circle cx="40" cy="60" r="8" fill="#e2e8f0" />
         
-        {/* Section: Overview */}
-        {activeTab === 'overview' && (
-          <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-start gap-4 p-6 bg-blue-50 rounded-2xl border border-blue-100 mb-8">
-              <Info className="text-blue-600 shrink-0 mt-1" />
-              <div>
-                <h2 className="text-xl font-bold text-blue-900 mb-2">Lesson Objectives</h2>
-                <ul className="text-blue-800 space-y-2">
-                  <li>• Master mechanical vocabulary for power transmission.</li>
-                  <li>• Understand the difference between chain and belt drive systems.</li>
-                  <li>• Analyze the transformation of reciprocating motion into rotary motion.</li>
-                </ul>
-              </div>
-            </div>
-            <div className="prose prose-slate max-w-none">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                    Mechanical systems are the heart of industry. In this lesson, we focus on how power moves over distances between shafts and how we change the <strong>type</strong> of motion to suit our needs—like turning the vertical explosion in an engine into the rotation of wheels.
-                </p>
-            </div>
-          </section>
-        )}
+        <path d="M 160 25 L 165 30 L 175 30 L 180 40 L 185 50 L 180 65 L 170 75 L 150 75 L 140 65 L 135 50 L 140 40 L 150 30 Z" fill="#64748b" />
+        <circle cx="160" cy="60" r="22" fill="#475569" />
+        <circle cx="160" cy="60" r="8" fill="#e2e8f0" />
+      </svg>
+      <p className="text-sm text-slate-500 mt-2 text-center max-w-[200px]">Toothed wheels (sprockets) with a metal chain. Prevents slipping.</p>
+    </div>
+  </div>
+);
 
-        {/* Section: Transmitting Power */}
-        {activeTab === 'transmitting' && (
-          <section className="space-y-8 animate-in fade-in duration-500">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h2 className="text-2xl font-bold flex items-center gap-2 mb-4">
-                  <Layers className="text-blue-600" /> Chains, Sprockets & Pulleys
-                </h2>
-                <div className="space-y-4">
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                    <h3 className="font-bold text-slate-800">Chain Drive</h3>
-                    <p className="text-sm text-slate-600">Uses a <strong>Sprocket</strong> (toothed wheel) to transmit high forces without slipping. Commonly seen in bicycles and motorcycles.</p>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                    <h3 className="font-bold text-slate-800">Belt Drive</h3>
-                    <p className="text-sm text-slate-600">Uses a <strong>Pulley</strong> (smooth or toothed wheel). Quieter than chains but may slip if not toothed.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <ChainBeltVisual type="chain" />
-                <ChainBeltVisual type="belt" />
-              </div>
-            </div>
-
-            <div className="bg-slate-800 text-white p-6 rounded-xl shadow-lg">
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                <CheckCircle2 className="text-emerald-400" /> Key Engineering Principle
-              </h3>
-              <p className="text-slate-300">
-                <strong>Mechanical Advantage:</strong> By changing the size ratio between two sprockets or pulleys, we can increase output force at the cost of speed, or vice versa.
-              </p>
-            </div>
-          </section>
-        )}
-
-        {/* Section: Motion Conversion */}
-        {activeTab === 'conversion' && (
-          <section className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-6">Reciprocating vs. Rotary Motion</h2>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-6">
-                <p className="text-slate-600">
-                  In internal combustion engines, pistons move up and down (<strong>Reciprocating Motion</strong>). To move a vehicle, this must become circular movement (<strong>Rotary Motion</strong>).
-                </p>
-                <div className="space-y-4">
-                    <div className="flex gap-4 items-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0 font-bold text-blue-600">01</div>
-                        <div>
-                            <h4 className="font-bold">Connecting Rod</h4>
-                            <p className="text-xs text-slate-500">The link between the piston and the crank.</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4 items-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0 font-bold text-blue-600">02</div>
-                        <div>
-                            <h4 className="font-bold">Crankshaft</h4>
-                            <p className="text-xs text-slate-500">The central shaft that handles the turning moment.</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4 items-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0 font-bold text-blue-600">03</div>
-                        <div>
-                            <h4 className="font-bold">Flywheel</h4>
-                            <p className="text-xs text-slate-500">A heavy wheel that uses inertia to keep the rotation smooth.</p>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              <CrankshaftVisual />
-            </div>
-          </section>
-        )}
-
-        {/* Section: Valve Mechanisms */}
-        {activeTab === 'mechanisms' && (
-          <section className="animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row gap-12 items-center">
-              <div className="md:w-1/2">
-                <h2 className="text-2xl font-bold mb-4">Valve Control Systems</h2>
-                <p className="text-slate-600 mb-6">
-                  Engine valves must open and close with perfect timing. This is achieved using a <strong>Camshaft</strong>.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex gap-2">
-                    <span className="font-bold text-emerald-600">Cam:</span> A rotating part with an irregular (egg) shape.
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-bold text-emerald-600">Follower:</span> The part that rests on the cam and moves up/down as the cam rotates.
-                  </li>
-                  <li className="flex gap-2 text-sm italic text-slate-500 bg-slate-100 p-2 rounded">
-                    Concept: "Cams convert rotary motion back into controlled reciprocating motion."
-                  </li>
-                </ul>
-              </div>
-              <div className="md:w-1/2 flex justify-center">
-                <CamVisual />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Section: Exercises */}
-        {activeTab === 'exercises' && (
-          <section className="animate-in fade-in duration-500">
-            <h2 className="text-2xl font-bold mb-6">Knowledge Check</h2>
-            
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-              <h3 className="text-lg font-bold mb-6 text-slate-700 border-b pb-2">Match the Terminology</h3>
-              
-              <div className="space-y-6">
-                {[
-                  { id: 'q1', label: '1. Sprocket', options: [{v:'a', l:'Wheel used with belts'}, {v:'b', l:'Converts motion types'}, {v:'c', l:'Toothed wheel for chains'}] },
-                  { id: 'q2', label: '2. Pulley', options: [{v:'a', l:'Wheel used with belts'}, {v:'b', l:'Heavy stabilizing wheel'}, {v:'c', l:'Irregular rotating part'}] },
-                  { id: 'q3', label: '3. Crankshaft', options: [{v:'a', l:'Connecting rod'}, {v:'b', l:'Converts reciprocating to rotary'}, {v:'c', l:'Controls valve timing'}] },
-                  { id: 'q4', label: '4. Flywheel', options: [{v:'e', l:'Heavy wheel maintaining smooth rotation'}, {v:'f', l:'A simple cable'}] },
-                  { id: 'q5', label: '5. Cam', options: [{v:'d', l:'Rotating part controlling linear timing'}, {v:'f', l:'A type of belt'}] }
-                ].map((q) => (
-                  <div key={q.id} className="flex flex-col md:flex-row md:items-center gap-4">
-                    <span className="w-32 font-bold text-slate-800">{q.label}</span>
-                    <select 
-                      onChange={(e) => handleAnswer(q.id, e.target.value)}
-                      className="flex-1 p-2 rounded border border-slate-300 bg-slate-50"
-                    >
-                      <option value="">Select Definition...</option>
-                      {q.options.map(o => <option key={o.v} value={o.v}>{o.l}</option>)}
-                    </select>
-                  </div>
-                ))}
-              </div>
-
-              <button 
-                onClick={checkQuiz}
-                className="mt-8 w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-              >
-                Check My Answers
-              </button>
-
-              {quizScore !== null && (
-                <div className={`mt-6 p-4 rounded-lg flex items-center justify-between ${quizScore >= 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-orange-100 text-orange-800'}`}>
-                  <span className="font-bold text-lg">Result: {quizScore} / 5</span>
-                  {quizScore === 5 ? <p>Perfect Engineering Skill!</p> : <p>Review the visuals above.</p>}
-                  <button onClick={() => setQuizScore(null)} className="text-sm underline">Reset</button>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-      </main>
-
-      {/* Footer */}
-      <footer className="max-w-4xl mx-auto px-6 border-t border-slate-200 pt-8 text-center text-slate-400 text-sm">
-        <div className="flex justify-center gap-8 mb-4">
-            <span className="flex items-center gap-1"><BookOpen size={16} /> Technical Theory</span>
-            <span className="flex items-center gap-1"><RefreshCw size={16} /> Dynamic Systems</span>
-        </div>
-        <p>© 2024 Educational Engineering Series - Transmission 2 Module</p>
-      </footer>
+const ReciprocatingRotaryDiagram = () => {
+  return (
+    <div className="flex flex-col items-center p-6 bg-slate-50 rounded-xl border border-slate-200 relative overflow-hidden">
+      <style>{`
+        @keyframes rotateCrank {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes movePiston {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(40px); }
+          100% { transform: translateY(0px); }
+        }
+        .crank-animate {
+          animation: rotateCrank 2s linear infinite;
+          transform-origin: 100px 140px;
+        }
+        .piston-animate {
+          animation: movePiston 2s ease-in-out infinite;
+        }
+      `}</style>
+      <h4 className="font-semibold text-slate-700 mb-4">Piston & Crankshaft (Motion Conversion)</h4>
+      <div className="relative w-[200px] h-[220px]">
+        {/* Cylinder outline */}
+        <rect x="75" y="10" width="50" height="90" fill="none" stroke="#cbd5e1" strokeWidth="4" />
+        
+        <svg width="200" height="220" viewBox="0 0 200 220">
+          {/* Crank Center */}
+          <circle cx="100" cy="140" r="6" fill="#334155" />
+          {/* Piston (Reciprocating) */}
+          <g className="piston-animate">
+            <rect x="78" y="20" width="44" height="30" rx="4" fill="#64748b" />
+            <line x1="100" y1="50" x2="100" y2="70" stroke="#475569" strokeWidth="6" strokeLinecap="round"/>
+          </g>
+          {/* Crank & Conrod (Rotary) */}
+          <g className="crank-animate">
+            <line x1="100" y1="140" x2="100" y2="100" stroke="#94a3b8" strokeWidth="8" strokeLinecap="round" />
+            <circle cx="100" cy="100" r="8" fill="#475569" />
+          </g>
+          {/* Rotary Path Indicator */}
+          <circle cx="100" cy="140" r="40" fill="none" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4 4" />
+        </svg>
+      </div>
+      <div className="flex gap-4 mt-4 w-full justify-center">
+        <span className="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">Reciprocating (Linear)</span>
+        <span className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-medium">Rotary (Circular)</span>
+      </div>
     </div>
   );
 };
 
-export default TransmissionApp;
+const CamFollowerDiagram = () => {
+  return (
+    <div className="flex flex-col items-center p-6 bg-slate-50 rounded-xl border border-slate-200">
+       <style>{`
+        @keyframes rotateCam {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes moveFollower {
+          0%, 100% { transform: translateY(0px); }
+          25% { transform: translateY(-20px); }
+          50% { transform: translateY(0px); }
+        }
+        .cam-animate {
+          animation: rotateCam 3s linear infinite;
+          transform-origin: 100px 120px;
+        }
+        .follower-animate {
+          animation: moveFollower 3s linear infinite;
+        }
+      `}</style>
+      <h4 className="font-semibold text-slate-700 mb-4">Cam & Follower System</h4>
+      <div className="relative w-[200px] h-[180px]">
+        <svg width="200" height="180" viewBox="0 0 200 180">
+          {/* Valve/Follower */}
+          <g className="follower-animate">
+            <rect x="95" y="20" width="10" height="70" fill="#94a3b8" />
+            <rect x="85" y="90" width="30" height="6" rx="2" fill="#475569" />
+            <path d="M 85 20 L 115 20 L 100 5 Z" fill="#64748b" /> {/* Valve head */}
+          </g>
+          {/* Guide for follower */}
+          <rect x="85" y="40" width="30" height="20" fill="none" stroke="#cbd5e1" strokeWidth="4" />
+          
+          {/* Cam (Egg shaped) */}
+          <g className="cam-animate">
+            <path d="M 100 120 C 130 120, 120 85, 100 85 C 80 85, 70 120, 100 120 Z" fill="#3b82f6" transform="scale(1.5) translate(-33, -30)" />
+            <circle cx="100" cy="120" r="4" fill="#1e40af" />
+          </g>
+        </svg>
+      </div>
+      <p className="text-sm text-slate-500 mt-2 text-center max-w-[220px]">Rotary motion of the shaped <strong>cam</strong> causes the <strong>follower</strong> to move up and down, opening and closing valves.</p>
+    </div>
+  );
+};
+
+// --- MAIN APP COMPONENT ---
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('lesson');
+  const [exercise1Answers, setExercise1Answers] = useState({});
+  const [ex1Score, setEx1Score] = useState(null);
+
+  // Ex 1 logic
+  const ex1Questions = [
+    { id: 'q1', term: 'Sprocket', correct: 'C' },
+    { id: 'q2', term: 'Pulley', correct: 'E' },
+    { id: 'q3', term: 'Crankshaft', correct: 'B' },
+    { id: 'q4', term: 'Flywheel', correct: 'A' },
+    { id: 'q5', term: 'Cam', correct: 'D' },
+  ];
+  const ex1Options = [
+    { id: 'A', text: 'Stabilizes rotational motion' },
+    { id: 'B', text: 'Converts reciprocating motion to rotary motion' },
+    { id: 'C', text: 'Toothed wheel for a chain' },
+    { id: 'D', text: 'Controls movement of a follower' },
+    { id: 'E', text: 'Smooth wheel for belts' },
+  ];
+
+  const handleEx1Change = (qId, val) => {
+    setExercise1Answers(prev => ({ ...prev, [qId]: val }));
+  };
+
+  const checkEx1 = () => {
+    let score = 0;
+    ex1Questions.forEach(q => {
+      if (exercise1Answers[q.id] === q.correct) score++;
+    });
+    setEx1Score(score);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 font-sans text-slate-800 selection:bg-blue-200">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-blue-900 to-slate-800 text-white py-12 px-6 shadow-lg">
+        <div className="max-w-4xl mx-auto">
+         
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+            Transmission Systems: <br/> Chains, Pulleys & Motion
+          </h1>
+        
+        </div>
+      </header>
+
+    
+
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto p-6 py-10">
+        
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            {/* Section 1 */}
+            <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-blue-100 p-3 rounded-lg text-blue-700">
+                  <Settings className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800">1. Chains, Sprockets, and Pulleys</h2>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-900 mb-2">Transmitting Motion Over Distance</h3>
+                  <p className="text-slate-600 mb-4 leading-relaxed">
+                    Mechanical drives are essential for transferring power from one shaft to another. 
+                  </p>
+                  <ul className="space-y-3 text-slate-600">
+                    <li className="flex items-start gap-2">
+                      <ArrowRight className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                      <span><strong>Chain Drives:</strong> Use a chain driven by toothed wheels called <em>sprockets</em>. Changing sprocket sizes alters the gear ratio. They are used when slipping must be avoided.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <ArrowRight className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                      <span><strong>Belt Drives:</strong> Work similarly but use smooth wheels called <em>pulleys</em> (or sheaves) and a flexible belt. Toothed belts exist for slip-free applications.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <ArrowRight className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                      <span><strong>Mechanical Advantage:</strong> A system of pulleys can multiply force, allowing us to lift heavy loads (e.g., cranes using cables/wire ropes).</span>
+                    </li>
+                  </ul>
+                </div>
+                {/* Visual Component */}
+                <PulleysAndChainsDiagram />
+              </div>
+            </section>
+
+            {/* Section 2 */}
+            <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-emerald-100 p-3 rounded-lg text-emerald-700">
+                  <Activity className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800">2. Conversion: Reciprocating ↔ Rotary</h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div className="order-2 md:order-1">
+                  <ReciprocatingRotaryDiagram />
+                </div>
+                <div className="order-1 md:order-2">
+                  <h3 className="text-lg font-semibold text-emerald-900 mb-2">Understanding Motion Types</h3>
+                  <p className="text-slate-600 mb-4 leading-relaxed">
+                    Machines often need to transform back-and-forth movement into continuous circular movement, or vice versa.
+                  </p>
+                  <ul className="space-y-3 text-slate-600">
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 mt-2 shrink-0"></span>
+                      <span><strong>Reciprocating Motion:</strong> Back-and-forth linear movement (e.g., the up and down movement of pistons).</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 mt-2 shrink-0"></span>
+                      <span><strong>Rotary Motion:</strong> Circular movement (e.g., rotating shafts).</span>
+                    </li>
+                  </ul>
+                  
+                 
+                </div>
+              </div>
+            </section>
+
+            {/* Section 3 */}
+            <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-purple-100 p-3 rounded-lg text-purple-700">
+                  <Settings className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800">3. Engine Components & Motion Control</h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-purple-900 mb-2">Controlling Speed and Timing</h3>
+                  
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-slate-800 flex items-center gap-2">
+                      <span className="bg-purple-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">A</span>
+                      The Flywheel
+                    </h4>
+                    <p className="text-slate-600 text-sm mt-1 ml-7">
+                      A heavy rotating wheel attached to the crankshaft. It provides momentum and ensures the rotational motion remains smooth and constant between power strokes.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-slate-800 flex items-center gap-2">
+                      <span className="bg-purple-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">B</span>
+                      The Camshaft System
+                    </h4>
+                    <p className="text-slate-600 text-sm mt-1 ml-7">
+                      Transfers rotary motion to precisely control engine valves. It consists of:
+                    </p>
+                    <ul className="list-disc ml-12 text-sm text-slate-600 mt-2 space-y-1">
+                      <li><strong>Cam:</strong> A rotating part with a specifically shaped profile (often egg-shaped).</li>
+                      <li><strong>Follower:</strong> A component that rides on the cam and moves up and down as the cam rotates.</li>
+                      <li><strong>Function:</strong> Opens and closes engine valves at the exact right time.</li>
+                    </ul>
+                  </div>
+                </div>
+                {/* Visual Component */}
+                <CamFollowerDiagram />
+              </div>
+            </section>
+          </div>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              <div className="p-6 bg-slate-50 border-b border-slate-200">
+                <h2 className="text-2xl font-bold text-slate-800">Vocabulary Reference List</h2>
+                <p className="text-slate-500 mt-1">Key terminology for mechanical transmission systems.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-600 text-sm uppercase tracking-wider">
+                      <th className="py-4 px-6 font-semibold border-b">Term</th>
+                      <th className="py-4 px-6 font-semibold border-b">Definition</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-slate-700">
+                    {[
+                      { term: "Chain drive", def: "System using a chain to transmit motion" },
+                      { term: "Sprocket", def: "Toothed wheel driving a chain" },
+                      { term: "Belt drive", def: "System using a belt and pulleys" },
+                      { term: "Pulley / Sheave", def: "Smooth wheel guiding a belt" },
+                      { term: "Mechanical advantage", def: "System that increases force" },
+                      { term: "Reciprocating motion", def: "Back-and-forth motion" },
+                      { term: "Rotary motion", def: "Circular motion" },
+                      { term: "Connecting rod", def: "Link between piston and crankshaft" },
+                      { term: "Crankshaft", def: "Converts motion types" },
+                      { term: "Torque", def: "Turning force" },
+                      { term: "Flywheel", def: "Wheel that stabilizes motion" },
+                      { term: "Cam", def: "Shaped rotating component" },
+                      { term: "Follower", def: "Component that tracks cam motion" },
+                      { term: "Valve", def: "Controls flow in engine" },
+                    ].map((row, idx) => (
+                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <td className="py-4 px-6 font-medium text-blue-900">{row.term}</td>
+                        <td className="py-4 px-6">{row.def}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Exercise 1: Matching Terms (Basic)</h2>
+              <p className="text-slate-600 mb-6">Match each mechanical term to its correct definition using the dropdown menus.</p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  {ex1Questions.map((q) => (
+                    <div key={q.id} className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
+                      <span className="font-semibold text-slate-700">{q.term}</span>
+                      <select 
+                        className="bg-white border border-slate-300 rounded p-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={exercise1Answers[q.id] || ''}
+                        onChange={(e) => handleEx1Change(q.id, e.target.value)}
+                        disabled={ex1Score !== null}
+                      >
+                        <option value="">Select...</option>
+                        {ex1Options.map(opt => (
+                          <option key={opt.id} value={opt.id}>{opt.id}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                  <h3 className="font-semibold text-blue-900 mb-4">Definitions</h3>
+                  <ul className="space-y-3 text-sm text-blue-800">
+                    {ex1Options.map(opt => (
+                      <li key={opt.id} className="flex gap-3">
+                        <span className="font-bold bg-blue-200 w-6 h-6 flex items-center justify-center rounded shrink-0">{opt.id}</span>
+                        <span>{opt.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center gap-4">
+                {ex1Score === null ? (
+                  <button 
+                    onClick={checkEx1}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+                  >
+                    Check Answers
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-4 w-full">
+                    <div className={`flex items-center gap-2 font-bold text-lg ${ex1Score === 5 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                      <CheckCircle className="w-6 h-6" />
+                      Score: {ex1Score} / 5
+                    </div>
+                    <button 
+                      onClick={() => { setEx1Score(null); setExercise1Answers({}); }}
+                      className="ml-auto text-slate-500 hover:text-slate-800 underline text-sm"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Static Exercises for preview */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Exercise 2</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-700 mb-3 border-b pb-2">Fill in the Blanks</h3>
+                  <ol className="list-decimal ml-5 space-y-3 text-slate-600">
+                    <li>A <span className="inline-block w-24 border-b-2 border-slate-300"></span> transmits motion using a flexible belt.</li>
+                    <li>A <span className="inline-block w-24 border-b-2 border-slate-300"></span> connects the piston to the crankshaft.</li>
+                    <li>A <span className="inline-block w-24 border-b-2 border-slate-300"></span> system can lift heavy loads with less effort.</li>
+                    <li>A <span className="inline-block w-24 border-b-2 border-slate-300"></span> rotates and causes a follower to move.</li>
+                    <li>A <span className="inline-block w-24 border-b-2 border-slate-300"></span> helps maintain constant rotational speed.</li>
+                  </ol>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-700 mb-3 border-b pb-2">Contextual Usage</h3>
+                  <ul className="space-y-3 text-slate-600">
+                    <li><span className="text-blue-500 mr-2">→</span> A system that uses toothed wheels and a chain to transmit motion. <span className="italic text-slate-400">(Answer: ________________)</span></li>
+                    <li><span className="text-blue-500 mr-2">→</span> A mechanism that converts linear piston motion into rotation. <span className="italic text-slate-400">(Answer: ________________)</span></li>
+                    <li><span className="text-blue-500 mr-2">→</span> A rotating component that opens and closes valves. <span className="italic text-slate-400">(Answer: ________________)</span></li>
+                    <li><span className="text-blue-500 mr-2">→</span> A system designed to increase lifting force. <span className="italic text-slate-400">(Answer: ________________)</span></li>
+                    <li><span className="text-blue-500 mr-2">→</span> A rotating mass used to smooth engine operation. <span className="italic text-slate-400">(Answer: ________________)</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+      </main>
+    </div>
+  );
+}

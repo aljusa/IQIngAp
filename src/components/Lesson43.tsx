@@ -1,463 +1,460 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Activity, Lightbulb, Battery, BookOpen, CheckCircle, ArrowRight, Info } from 'lucide-react';
+import { Zap, Battery, Lightbulb, Activity, BookOpen, Info, CheckCircle, XCircle } from 'lucide-react';
 
-// --- STYLES FOR ANIMATIONS ---
-const styles = `
-  @keyframes flow {
-    0% { transform: translateX(-100%); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateX(400%); opacity: 0; }
-  }
-  .electron {
-    animation: flow linear infinite;
-  }
-`;
+// --- Visual Components ---
 
-// --- VISUAL COMPONENTS ---
-
-const CurrentVisual = () => {
+const CircuitDiagram = () => {
   return (
-    <div className="bg-slate-900 rounded-xl p-6 flex flex-col items-center justify-center relative overflow-hidden h-64 border-4 border-slate-700 shadow-inner">
-      <div className="absolute top-4 left-4 text-slate-400 text-sm font-medium flex items-center gap-2">
-        <Info size={16} /> Visualización: Flujo de Electrones en un Conductor
-      </div>
-      
-      {/* Conductor (Wire) */}
-      <div className="w-full h-16 bg-gradient-to-b from-orange-400 via-orange-300 to-orange-500 rounded-lg relative shadow-[0_0_15px_rgba(251,146,60,0.4)] flex items-center border-y-2 border-orange-600">
-        
-        {/* Electrons */}
-        <div className="absolute w-full h-full flex items-center overflow-hidden">
-          {[...Array(12)].map((_, i) => (
-            <div 
-              key={i} 
-              className="electron w-4 h-4 bg-blue-300 rounded-full absolute shadow-[0_0_10px_rgba(147,197,253,0.8)] flex items-center justify-center text-[8px] font-bold text-blue-900"
-              style={{ 
-                left: `${(i * 10) - 20}%`, 
-                animationDuration: '3s',
-                animationDelay: `${i * 0.25}s`
-              }}
-            >
-              -
-            </div>
-          ))}
+    <div className="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-xl border border-slate-200">
+      <h4 className="text-lg font-semibold text-slate-700 mb-4">Interactive Simple Circuit</h4>
+      <div className="relative w-64 h-48 mb-4">
+        {/* Wires */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path
+            d="M 20 50 L 20 20 L 80 20 L 80 50"
+            fill="none"
+            stroke="#94a3b8"
+            strokeWidth="2"
+          />
+          <path
+            d="M 80 50 L 80 80 L 20 80 L 20 50"
+            fill="none"
+            stroke="#94a3b8"
+            strokeWidth="2"
+          />
+          {/* Animated Electrons */}
+          <path
+            d="M 20 50 L 20 20 L 80 20 L 80 50 L 80 80 L 20 80 Z"
+            fill="none"
+            stroke="#3b82f6"
+            strokeWidth="4"
+            strokeDasharray="4 12"
+            className="animate-[dash_3s_linear_infinite]"
+          />
+        </svg>
+
+        {/* Cell / Battery */}
+        <div className="absolute top-[35px] left-[5px] w-8 h-8 bg-white border-2 border-slate-800 flex items-center justify-center font-bold text-xs rounded-sm shadow-sm z-10">
+          <Battery size={20} className="text-orange-500" />
         </div>
-        <div className="absolute right-4 text-orange-900 font-bold opacity-50">Cobre (Conductor)</div>
+        <div className="absolute top-[80px] left-[0px] text-xs font-semibold text-slate-600 bg-white px-1">Cell (Supply)</div>
+
+        {/* Lamp / Load */}
+        <div className="absolute top-[35px] right-[5px] w-8 h-8 bg-white border-2 border-slate-800 rounded-full flex items-center justify-center shadow-sm z-10">
+          <Lightbulb size={20} className="text-yellow-500" />
+        </div>
+        <div className="absolute top-[80px] right-[-10px] text-xs font-semibold text-slate-600 bg-white px-1">Lamp (Component)</div>
       </div>
-      <div className="mt-8 text-slate-300 text-center text-sm max-w-xs">
-        <span className="font-bold text-blue-400">Concepto Clave:</span> La corriente eléctrica es el flujo direccional de estas partículas cargadas negativamente (electrones).
-      </div>
+      <p className="text-sm text-slate-500 text-center">
+        Electrons (blue dashed line) flow from the cell, through the conductor (wires), to power the component (lamp).
+      </p>
+      <style>{`
+        @keyframes dash {
+          to {
+            stroke-dashoffset: -100;
+          }
+        }
+      `}</style>
     </div>
   );
 };
 
-const OhmVisual = () => {
+const OhmsLawVisualizer = () => {
   const [voltage, setVoltage] = useState(12);
-  const [resistance, setResistance] = useState(2);
-  
+  const [resistance, setResistance] = useState(4);
   const current = (voltage / resistance).toFixed(1);
-  const flowSpeed = Math.max(0.5, 5 / current); // Faster speed = lower duration
 
   return (
-    <div className="bg-slate-50 rounded-xl p-6 border-2 border-slate-200 shadow-sm flex flex-col gap-6 h-full justify-between">
-      <div className="text-slate-600 text-sm font-medium flex items-center gap-2">
-        <Info size={16} /> Visualización Interactiva: Relación Voltaje, Resistencia y Corriente
-      </div>
-
-      <div className="flex flex-col gap-4">
-        {/* Sliders */}
-        <div className="space-y-4">
+    <div className="p-6 bg-slate-50 rounded-xl border border-slate-200">
+      <h4 className="text-lg font-semibold text-slate-700 mb-4">Ohm's Law Simulator</h4>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6">
           <div>
-            <div className="flex justify-between mb-1">
-              <label className="text-sm font-semibold text-slate-700">Voltaje (V) - Fuerza impulsora</label>
-              <span className="text-sm font-bold text-blue-600">{voltage} V</span>
-            </div>
-            <input 
-              type="range" min="1" max="24" value={voltage} 
+            <label className="flex justify-between text-sm font-medium text-slate-700 mb-2">
+              <span>Voltage (Pressure)</span>
+              <span className="font-bold text-orange-600">{voltage} V</span>
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="24"
+              value={voltage}
               onChange={(e) => setVoltage(Number(e.target.value))}
-              className="w-full accent-blue-600"
+              className="w-full accent-orange-500"
             />
           </div>
           <div>
-            <div className="flex justify-between mb-1">
-              <label className="text-sm font-semibold text-slate-700">Resistencia (Ω) - Oposición</label>
-              <span className="text-sm font-bold text-red-600">{resistance} Ω</span>
-            </div>
-            <input 
-              type="range" min="1" max="10" value={resistance} 
+            <label className="flex justify-between text-sm font-medium text-slate-700 mb-2">
+              <span>Resistance (Opposition)</span>
+              <span className="font-bold text-yellow-600">{resistance} Ω</span>
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="12"
+              value={resistance}
               onChange={(e) => setResistance(Number(e.target.value))}
-              className="w-full accent-red-600"
+              className="w-full accent-yellow-500"
             />
           </div>
         </div>
-
-        {/* Visual Indicator */}
-        <div className="mt-4 p-4 bg-slate-200 rounded-lg flex items-center gap-4 relative overflow-hidden">
-           <div className="flex-shrink-0 bg-blue-500 text-white p-3 rounded-lg font-bold z-10 shadow-md">
-             {voltage}V
-           </div>
-           
-           <div className="flex-grow h-8 bg-slate-300 rounded-full relative overflow-hidden shadow-inner flex items-center">
-              {/* Animated current flow based on calculated current */}
-              {[...Array(8)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="electron w-3 h-3 bg-yellow-400 rounded-full absolute shadow-md"
-                  style={{ 
-                    animationDuration: `${flowSpeed}s`,
-                    animationDelay: `${i * (flowSpeed/8)}s`,
-                  }}
-                />
-              ))}
-              {/* Resistance representation (constriction) */}
-              <div 
-                className="absolute left-1/2 top-0 bottom-0 bg-red-400 opacity-80 flex items-center justify-center transition-all duration-300"
-                style={{ width: `${resistance * 10}%`, transform: 'translateX(-50%)' }}
-              >
-                 <span className="text-xs text-white font-bold block transform -rotate-90 md:rotate-0">R</span>
-              </div>
-           </div>
-
-           <div className="flex-shrink-0 bg-yellow-500 text-white p-3 rounded-lg font-bold z-10 shadow-md flex items-center gap-1">
-             <Activity size={18} /> {current}A
-           </div>
-        </div>
-
-        <div className="text-center text-sm text-slate-600 mt-2 bg-blue-50 p-3 rounded-md">
-          A mayor voltaje <ArrowRight className="inline w-3 h-3"/> mayor corriente.<br/>
-          A mayor resistencia <ArrowRight className="inline w-3 h-3"/> menor corriente.
+        <div className="flex flex-col items-center justify-center border-l-2 border-slate-200 pl-8">
+          <div className="text-sm text-slate-500 mb-2">Resulting Current</div>
+          <div className="text-4xl font-extrabold text-blue-600 mb-2">{current} A</div>
+          <div className="w-full bg-slate-200 h-8 rounded-full overflow-hidden mt-4 relative">
+            <div
+              className="h-full bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-end px-2"
+              style={{ width: `${Math.min((current / 24) * 100, 100)}%` }}
+            >
+              <Activity className="text-white opacity-70" size={16} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const PowerVisual = () => {
-  const [power, setPower] = useState(1000);
-  const fixedVoltage = 230;
-  const calculatedCurrent = (power / fixedVoltage).toFixed(2);
-
-  // Brightness mapping: 100W -> low, 3000W -> max
-  const brightness = Math.min(100, Math.max(20, (power / 3000) * 100));
+const PowerCalculator = () => {
+  const [power, setPower] = useState(2000);
+  const [voltage, setVoltage] = useState(230);
+  const current = voltage > 0 ? (power / voltage).toFixed(2) : 0;
 
   return (
-    <div className="bg-indigo-950 text-white rounded-xl p-6 border-2 border-indigo-800 flex flex-col md:flex-row items-center gap-8 h-full">
-      <div className="flex-1 space-y-6 w-full">
-         <div className="text-indigo-300 text-sm font-medium flex items-center gap-2">
-            <Info size={16} /> Visualización: Consumo de Potencia
-         </div>
-         
-         <div>
-            <div className="flex justify-between mb-2">
-              <label className="text-sm font-semibold text-indigo-200">Potencia del Aparato (W)</label>
-              <span className="text-sm font-bold text-yellow-400">{power} W</span>
-            </div>
-            <input 
-              type="range" min="100" max="3000" step="100" value={power} 
-              onChange={(e) => setPower(Number(e.target.value))}
-              className="w-full accent-yellow-400"
-            />
+    <div className="p-6 bg-slate-50 rounded-xl border border-slate-200">
+       <h4 className="text-lg font-semibold text-slate-700 mb-4">Electrical Power Calculator</h4>
+       <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+          <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100 w-full md:w-1/3">
+             <label className="text-xs font-semibold text-slate-500 uppercase">Power (Watts)</label>
+             <input 
+                type="number" 
+                value={power} 
+                onChange={(e) => setPower(Number(e.target.value))}
+                className="text-2xl font-bold text-center text-slate-800 border-b-2 border-slate-300 focus:border-blue-500 outline-none w-full bg-transparent mt-2"
+             />
           </div>
-
-          <div className="bg-indigo-900/50 p-4 rounded-lg border border-indigo-700/50 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-indigo-300">Voltaje del Sistema:</span>
-              <span className="font-mono">{fixedVoltage} V</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-indigo-300">Fórmula:</span>
-              <span className="font-mono text-xs">Corriente = Potencia ÷ Voltaje</span>
-            </div>
-            <div className="w-full h-px bg-indigo-700 my-2"></div>
-            <div className="flex justify-between font-bold">
-              <span className="text-indigo-200">Corriente Generada:</span>
-              <span className="text-green-400 font-mono">{calculatedCurrent} A</span>
-            </div>
+          <div className="text-2xl font-bold text-slate-400">÷</div>
+          <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100 w-full md:w-1/3">
+             <label className="text-xs font-semibold text-slate-500 uppercase">Voltage (Volts)</label>
+             <input 
+                type="number" 
+                value={voltage} 
+                onChange={(e) => setVoltage(Number(e.target.value))}
+                className="text-2xl font-bold text-center text-slate-800 border-b-2 border-slate-300 focus:border-orange-500 outline-none w-full bg-transparent mt-2"
+             />
           </div>
-      </div>
-
-      <div className="flex-shrink-0 flex flex-col items-center justify-center p-6 bg-indigo-900/30 rounded-full relative">
-        <div 
-          className="absolute inset-0 rounded-full transition-all duration-300"
-          style={{ 
-            boxShadow: `0 0 ${brightness * 1.5}px ${brightness * 0.5}px rgba(250, 204, 21, ${brightness/100})`,
-            backgroundColor: `rgba(250, 204, 21, ${brightness/500})`
-          }}
-        ></div>
-        <Lightbulb 
-          size={80} 
-          className="transition-colors duration-300 relative z-10"
-          color={brightness > 40 ? "#facc15" : "#4f46e5"}
-          fill={brightness > 40 ? "#facc15" : "transparent"}
-        />
-      </div>
+          <div className="text-2xl font-bold text-slate-400">=</div>
+          <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm border border-blue-200 w-full md:w-1/3">
+             <label className="text-xs font-semibold text-blue-600 uppercase">Current (Amps)</label>
+             <div className="text-2xl font-bold text-blue-700 mt-2">{current} A</div>
+          </div>
+       </div>
     </div>
-  );
+  )
 }
 
-const ExerciseSection = () => {
-  const [showAnswers1, setShowAnswers1] = useState(false);
-  const [showAnswers2, setShowAnswers2] = useState(false);
+// --- Exercises Components ---
+
+const Exercises = () => {
+  // Exercise 1 State
+  const [ex1, setEx1] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' });
+  const [ex1Result, setEx1Result] = useState(null);
+  const ex1Answers = { 1: 'E', 2: 'C', 3: 'B', 4: 'D', 5: 'A' };
+
+  // Exercise 2 State
+  const [ex2, setEx2] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' });
+  const [ex2Result, setEx2Result] = useState(null);
+  const ex2Answers = { 1: 'circuit', 2: 'conductor', 3: 'voltage', 4: 'electrons', 5: 'resistance' };
+
+  // Exercise 3 State
+  const [ex3, setEx3] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' });
+  const [ex3Result, setEx3Result] = useState(null);
+  const ex3Answers = { 1: 'insulator', 2: 'voltage', 3: 'conductor', 4: 'power', 5: 'charge carrier' };
+
+  const checkEx1 = () => {
+    let correct = 0;
+    Object.keys(ex1Answers).forEach(k => { if (ex1[k] === ex1Answers[k]) correct++; });
+    setEx1Result(correct === 5 ? 'success' : 'partial');
+  };
+
+  const checkEx2 = () => {
+    let correct = 0;
+    Object.keys(ex2Answers).forEach(k => { if (ex2[k].toLowerCase().trim() === ex2Answers[k]) correct++; });
+    setEx2Result(correct === 5 ? 'success' : 'partial');
+  };
+
+  const checkEx3 = () => {
+    let correct = 0;
+    Object.keys(ex3Answers).forEach(k => { if (ex3[k] === ex3Answers[k]) correct++; });
+    setEx3Result(correct === 5 ? 'success' : 'partial');
+  };
 
   return (
-    <div className="mt-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-      <div className="bg-slate-800 text-white p-6 flex items-center gap-3">
-        <CheckCircle size={24} className="text-green-400" />
-        <h2 className="text-2xl font-bold">Interactive Exercises</h2>
-      </div>
-
-      <div className="p-8 space-y-12">
-        {/* Exercise 1 */}
-        <section>
-          <div className="flex justify-between items-center mb-6 border-b pb-2">
-            <h3 className="text-lg font-bold text-slate-800">Exercise 1: Matching (Basic)</h3>
-            <button 
-              onClick={() => setShowAnswers1(!showAnswers1)}
-              className="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 py-1 px-3 rounded-full font-medium transition-colors"
-            >
-              {showAnswers1 ? "Hide Answers" : "Reveal Answers"}
-            </button>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-slate-50 p-4 rounded-lg">
-              <h4 className="font-bold text-slate-500 mb-3 text-sm uppercase tracking-wider">Terms</h4>
-              <ul className="space-y-3 font-medium text-slate-700">
-                <li className="flex justify-between">Current <span className="text-blue-600 font-bold">{showAnswers1 ? "→ b" : "→ __"}</span></li>
-                <li className="flex justify-between">Voltage <span className="text-blue-600 font-bold">{showAnswers1 ? "→ d" : "→ __"}</span></li>
-                <li className="flex justify-between">Resistance <span className="text-blue-600 font-bold">{showAnswers1 ? "→ c" : "→ __"}</span></li>
-                <li className="flex justify-between">Conductor <span className="text-blue-600 font-bold">{showAnswers1 ? "→ e" : "→ __"}</span></li>
-                <li className="flex justify-between">Insulator <span className="text-blue-600 font-bold">{showAnswers1 ? "→ a" : "→ __"}</span></li>
-              </ul>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-              <h4 className="font-bold text-blue-800 mb-3 text-sm uppercase tracking-wider">Definitions</h4>
-              <ul className="space-y-3 text-sm text-blue-900">
-                <li><strong>a.</strong> Material that blocks current</li>
-                <li><strong>b.</strong> Flow of electric charge</li>
-                <li><strong>c.</strong> Opposition to current</li>
-                <li><strong>d.</strong> Driving force of electricity</li>
-                <li><strong>e.</strong> Material that allows current</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Exercise 2 & 3 Combined for UI simplicity */}
-        <section>
-          <div className="flex justify-between items-center mb-6 border-b pb-2">
-            <h3 className="text-lg font-bold text-slate-800">Exercise 2 & 3: Fill in the Blanks / Context</h3>
-            <button 
-              onClick={() => setShowAnswers2(!showAnswers2)}
-              className="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 py-1 px-3 rounded-full font-medium transition-colors"
-            >
-              {showAnswers2 ? "Hide Answers" : "Reveal Answers"}
-            </button>
-          </div>
-
-          <div className="space-y-4">
+    <div className="space-y-12">
+      {/* Exercise 1 */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h4 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+          <BookOpen className="text-blue-500" /> Exercise 1: Matching Terms
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-3">
             {[
-              { q: "The flow of electric charge is called", a: "current" },
-              { q: "The unit of current is the", a: "ampere" },
-              { q: "Opposition to current flow is", a: "resistance" },
-              { q: "The unit of resistance is the", a: "ohm" },
-              { q: "A material like copper is a good", a: "conductor" },
-              { q: "A plastic coating acts as an", a: "insulator" },
-              { q: "A device operating at higher electrical force has higher", a: "voltage" },
-            ].map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-4 rounded-lg flex flex-col sm:flex-row sm:items-center gap-2">
-                <span className="text-slate-700 font-medium flex-1">{idx + 1}. {item.q}...</span>
-                {showAnswers2 ? (
-                  <span className="bg-green-100 text-green-800 font-bold px-4 py-1 rounded border border-green-200 shadow-sm text-center">
-                    {item.a}
-                  </span>
-                ) : (
-                  <span className="bg-white text-transparent border-b-2 border-slate-300 border-dashed px-8 py-1 rounded w-32">
-                    answer
-                  </span>
-                )}
+              { id: 1, term: 'Voltage' },
+              { id: 2, term: 'Resistance' },
+              { id: 3, term: 'Conductor' },
+              { id: 4, term: 'Electron' },
+              { id: 5, term: 'Circuit' }
+            ].map((item) => (
+              <div key={item.id} className="flex items-center gap-4">
+                <select 
+                  className="p-2 border rounded-md bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={ex1[item.id]}
+                  onChange={(e) => setEx1({ ...ex1, [item.id]: e.target.value })}
+                >
+                  <option value="">--</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                  <option value="E">E</option>
+                </select>
+                <span className="font-medium text-slate-700">{item.term}</span>
               </div>
             ))}
           </div>
-        </section>
+          <div className="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm text-slate-600">
+            <p><strong>A.</strong> Path through which current flows</p>
+            <p><strong>B.</strong> Material that allows current flow</p>
+            <p><strong>C.</strong> Opposition to current flow</p>
+            <p><strong>D.</strong> Negatively charged particle</p>
+            <p><strong>E.</strong> Electrical force driving current</p>
+          </div>
+        </div>
+        <div className="mt-6 flex items-center gap-4">
+          <button onClick={checkEx1} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Check Answers</button>
+          {ex1Result === 'success' && <span className="flex items-center text-green-600 font-semibold gap-1"><CheckCircle size={18} /> All Correct!</span>}
+          {ex1Result === 'partial' && <span className="flex items-center text-orange-600 font-semibold gap-1"><XCircle size={18} /> Keep trying!</span>}
+        </div>
+      </div>
 
+      {/* Exercise 2 */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h4 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+          <BookOpen className="text-blue-500" /> Exercise 2: Fill in the Blanks 
+        </h4>
+        <div className="space-y-4 text-slate-700 leading-relaxed">
+          <p>1. Electric current flows through a <input type="text" className="border-b-2 border-slate-300 focus:border-blue-500 outline-none w-24 text-center px-1" value={ex2[1]} onChange={e => setEx2({...ex2, 1: e.target.value})} />.</p>
+          <p>2. A <input type="text" className="border-b-2 border-slate-300 focus:border-blue-500 outline-none w-24 text-center px-1" value={ex2[2]} onChange={e => setEx2({...ex2, 2: e.target.value})} /> is a material with low resistance.</p>
+          <p>3. <input type="text" className="border-b-2 border-slate-300 focus:border-blue-500 outline-none w-24 text-center px-1" value={ex2[3]} onChange={e => setEx2({...ex2, 3: e.target.value})} /> is measured in volts.</p>
+          <p>4. <input type="text" className="border-b-2 border-slate-300 focus:border-blue-500 outline-none w-24 text-center px-1" value={ex2[4]} onChange={e => setEx2({...ex2, 4: e.target.value})} /> carry electric charge in a conductor.</p>
+          <p>5. High <input type="text" className="border-b-2 border-slate-300 focus:border-blue-500 outline-none w-24 text-center px-1" value={ex2[5]} onChange={e => setEx2({...ex2, 5: e.target.value})} /> reduces the flow of current.</p>
+        </div>
+        <div className="mt-6 flex items-center gap-4">
+          <button onClick={checkEx2} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Check Answers</button>
+          {ex2Result === 'success' && <span className="flex items-center text-green-600 font-semibold gap-1"><CheckCircle size={18} /> All Correct!</span>}
+          {ex2Result === 'partial' && <span className="flex items-center text-orange-600 font-semibold gap-1"><XCircle size={18} /> Review your spelling.</span>}
+        </div>
+      </div>
+
+       {/* Exercise 3 */}
+       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h4 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+          <BookOpen className="text-blue-500" /> Exercise 3: Contextual Usage 
+        </h4>
+        <div className="space-y-6 text-slate-700">
+            {[
+                { id: 1, prompt: "A plastic covering used to prevent electric shock →", options: ['conductor', 'insulator', 'electron'] },
+                { id: 2, prompt: "The force that pushes current through a wire →", options: ['resistance', 'voltage', 'power'] },
+                { id: 3, prompt: "A copper wire used to carry current →", options: ['insulator', 'circuit', 'conductor'] },
+                { id: 4, prompt: "The rate at which electrical energy is used →", options: ['electrical power', 'voltage', 'resistance'] },
+                { id: 5, prompt: "Particles moving through a conductor to create current →", options: ['charge carrier', 'ohm', 'watt'] },
+            ].map(q => (
+                <div key={q.id} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                    <p className="flex-1 font-medium">{q.prompt}</p>
+                    <select 
+                        className="p-2 border rounded-md bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none md:w-48"
+                        value={ex3[q.id]}
+                        onChange={(e) => setEx3({ ...ex3, [q.id]: e.target.value })}
+                    >
+                        <option value="">Select term...</option>
+                        {q.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                </div>
+            ))}
+        </div>
+        <div className="mt-6 flex items-center gap-4">
+          <button onClick={checkEx3} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Check Answers</button>
+          {ex3Result === 'success' && <span className="flex items-center text-green-600 font-semibold gap-1"><CheckCircle size={18} /> All Correct!</span>}
+          {ex3Result === 'partial' && <span className="flex items-center text-orange-600 font-semibold gap-1"><XCircle size={18} /> Keep trying!</span>}
+        </div>
       </div>
     </div>
   );
 };
 
-// --- MAIN APP COMPONENT ---
+
+// --- Main Application ---
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-100 font-sans selection:bg-blue-200">
-      <style>{styles}</style>
-      
-      {/* Header / Overview */}
-      <header className="bg-slate-900 text-white pt-16 pb-24 px-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
-           <Zap size={400} className="absolute -top-20 -right-20 text-blue-500 rotate-12" />
-        </div>
-        
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="flex items-center gap-3 text-blue-400 font-bold tracking-wider uppercase text-sm mb-4">
-            <BookOpen size={20} /> Academic Lesson
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-            Fundamentals of <br/> Electric Circuits
+    <div className="min-h-screen bg-slate-100 font-sans pb-16">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-12 px-6 shadow-md">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">
+            Fundamentals of Electricity
           </h1>
-          <p className="text-lg text-slate-300 max-w-2xl leading-relaxed">
-            This lesson introduces the fundamentals of electric circuits, including current, voltage, resistance, and electrical power. The focus is on essential vocabulary used in electrical and electronic engineering.
-          </p>
+
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 -mt-12 relative z-20 pb-20">
+      <main className="max-w-4xl mx-auto px-6 mt-[-30px] space-y-12">
         
-        {/* Section 1: Electric Current */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200">
-          <div className="grid md:grid-cols-2">
-            <div className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-slate-100">
-              <div className="flex items-center gap-3 text-blue-600 mb-4">
-                <Activity size={28} />
-                <h2 className="text-2xl font-bold text-slate-800">1. Electric Current</h2>
-              </div>
-              <div className="prose prose-slate">
-                <p className="text-slate-600 mb-6">
-                  <strong>Electric current</strong> is the flow of electric charge through a conductor. The property carried by particles such as <strong>electrons</strong> (negatively charged particles) creates this charge.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <span><strong>Ampere (A):</strong> The standard unit of current.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <span><strong>Conductor:</strong> A material that allows electricity to flow easily (e.g., a copper wire).</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <span><strong>Electrical supply & components:</strong> The source (e.g., a cell) and the devices (e.g., lamp) in a circuit.</span>
-                  </li>
-                </ul>
-                <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                  <span className="font-bold text-blue-800">Key Idea:</span> Current increases when more electrons flow through a conductor.
+        {/* Section 1: Key Concepts */}
+        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-blue-50 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+            <Zap className="text-blue-600" size={24} />
+            <h2 className="text-xl font-bold text-slate-800">1. Key Concepts: Electric Current</h2>
+          </div>
+          <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-4 text-slate-700 leading-relaxed text-lg">
+              <p>
+                An <strong>electric circuit</strong> is a system where electricity flows. The flow of electric charge is known as <strong>current (Amps, A)</strong>. 
+              </p>
+              <p>
+                This charge is carried by negatively charged particles called <strong>electrons</strong>. When more electrons flow, the current increases. These moving electrons act as <em>charge carriers</em>.
+              </p>
+              <h3 className="font-semibold text-slate-800 mt-4 border-b pb-2">Components of a Circuit:</h3>
+              <ul className="list-disc list-inside space-y-2">
+                <li><strong>Electrical supply:</strong> Source of energy (like a cell).</li>
+                <li><strong>Conductor:</strong> The path for current (usually wires).</li>
+                <li><strong>Components:</strong> Devices with a specific function (like a lamp).</li>
+              </ul>
+              
+              <div className="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-md flex gap-3 text-sm">
+                <Info className="text-yellow-600 shrink-0 mt-0.5" size={18} />
+                <div>
+                  <strong className="text-yellow-800 block mb-1">Language Note:</strong>
+                  In everyday English we say <em>battery</em>, but in technical English: 
+                  <br/>1 <strong>Cell</strong> = A single unit
+                  <br/>1 <strong>Battery</strong> = Multiple cells connected together.
                 </div>
               </div>
             </div>
-            {/* Visual Suggestion Rendered */}
-            <div className="p-8 md:p-10 bg-slate-50 flex items-center justify-center">
-              <div className="w-full">
-                <CurrentVisual />
-              </div>
+            {/* Visual Suggestion: Circuit Diagram */}
+            <div>
+              <CircuitDiagram />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Section 2: Voltage and Resistance */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200">
-          <div className="grid md:grid-cols-2">
-             <div className="order-2 md:order-1 p-8 md:p-10 bg-slate-100 flex items-center justify-center border-t md:border-t-0 md:border-r border-slate-200">
-              <div className="w-full h-full">
-                <OhmVisual />
-              </div>
-            </div>
-            <div className="order-1 md:order-2 p-8 md:p-10">
-              <div className="flex items-center gap-3 text-red-500 mb-4">
-                <Battery size={28} />
-                <h2 className="text-2xl font-bold text-slate-800">2. Voltage & Resistance</h2>
-              </div>
-              <div className="prose prose-slate">
-                <p className="text-slate-600 mb-6">
-                  <strong>Voltage (V)</strong>, also known as Electromotive Force (EMF), is the electrical potential difference or the "driving force" of current. <strong>Resistance (Ω)</strong> is the opposition to this current flow.
-                </p>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                     <div className="font-bold text-slate-800 mb-1">Ohm (Ω)</div>
-                     <div className="text-sm text-slate-600">Unit of resistance.</div>
-                  </div>
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                     <div className="font-bold text-slate-800 mb-1">Insulator</div>
-                     <div className="text-sm text-slate-600">Material with very high resistance.</div>
-                  </div>
-                </div>
-                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg space-y-2">
-                  <p className="font-bold text-red-800 m-0">Key Notes:</p>
-                  <ul className="text-sm text-red-900 m-0 pl-4 space-y-1">
-                    <li>Higher voltage → more current (if resistance is constant)</li>
-                    <li>Higher resistance → less current</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-orange-50 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+            <Activity className="text-orange-600" size={24} />
+            <h2 className="text-xl font-bold text-slate-800">2. Voltage and Resistance</h2>
           </div>
-        </div>
+          <div className="p-6 md:p-8 space-y-8">
+            <div className="text-slate-700 leading-relaxed text-lg space-y-4">
+              <p>
+                <strong>Voltage (V)</strong> is the electrical pressure that drives the current. It is also referred to as <em>electromotive force (EMF)</em>. If other factors stay constant, a higher voltage creates a higher current.
+              </p>
+              <p>
+                <strong>Resistance (Ω, ohms)</strong> is the opposition to current flow. High resistance means less current can flow, while low resistance allows more current.
+              </p>
+              
+              <h3 className="font-semibold text-slate-800 mt-6 border-b pb-2">Material Behavior:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+                  <h4 className="font-bold text-green-800">Conductors</h4>
+                  <p className="text-sm text-green-700 mt-1">Allow current to flow easily (low resistance). Example: Copper.</p>
+                </div>
+                <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+                  <h4 className="font-bold text-red-800">Insulators</h4>
+                  <p className="text-sm text-red-700 mt-1">Resist current flow (high resistance). Example: Plastic. Insulation prevents electric shock by blocking contact with live conductors.</p>
+                </div>
+              </div>
+            </div>
+            {/* Visual Suggestion: Interactive Simulator */}
+            <OhmsLawVisualizer />
+          </div>
+        </section>
 
         {/* Section 3: Electrical Power */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-          <div className="grid md:grid-cols-5">
-            <div className="md:col-span-2 p-8 md:p-10 border-b md:border-b-0 md:border-r border-slate-100">
-              <div className="flex items-center gap-3 text-yellow-500 mb-4">
-                <Zap size={28} />
-                <h2 className="text-2xl font-bold text-slate-800">3. Electrical Power</h2>
+        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-indigo-50 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+            <Battery className="text-indigo-600" size={24} />
+            <h2 className="text-xl font-bold text-slate-800">3. Electrical Power</h2>
+          </div>
+          <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4 text-slate-700 leading-relaxed text-lg">
+              <p>
+                <strong>Electrical power (W, watts)</strong> is the rate of energy use. It depends on both Voltage (V) and Current (A). Every electrical appliance (e.g., a kettle) has a <strong>Power rating</strong> indicating the power it requires.
+              </p>
+              <div className="bg-slate-50 p-4 rounded-lg font-mono text-center text-xl text-slate-800 shadow-inner">
+                Current = Power ÷ Voltage
               </div>
-              <div className="prose prose-slate">
-                <p className="text-slate-600 mb-4">
-                  <strong>Power (W)</strong> is the rate of electrical energy use, measured in <strong>Watts</strong>.
-                </p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></div>
-                    <span><strong>Electrical appliance:</strong> Device using electrical energy.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></div>
-                    <span><strong>Power rating:</strong> The amount of power required by a device.</span>
-                  </li>
-                </ul>
-                <div className="bg-indigo-50 border border-indigo-100 p-4 rounded-lg text-center">
-                  <span className="block text-xs uppercase tracking-wider font-bold text-indigo-400 mb-1">Formula</span>
-                  <span className="font-mono font-bold text-indigo-900 text-lg">Current (A) = Power (W) ÷ Voltage (V)</span>
-                </div>
-              </div>
+              <p className="text-sm text-slate-500">
+                Example: If an appliance uses 2000 W and is connected to a 230 V supply, the current is 2000 ÷ 230 = 8.7 A.
+              </p>
             </div>
-             <div className="md:col-span-3 p-8 md:p-10 bg-slate-900 flex items-center justify-center">
-              <div className="w-full h-full">
-                <PowerVisual />
-              </div>
+            {/* Visual Suggestion: Calculator */}
+            <div>
+              <PowerCalculator />
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Example Sentences Context Box */}
-        <div className="mt-12 bg-emerald-50 rounded-xl p-8 border border-emerald-100 shadow-sm">
-          <h3 className="text-emerald-800 font-bold text-xl mb-4 flex items-center gap-2">
-            <BookOpen size={24} /> Example Sentences (Engineering Context)
-          </h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              "The current flows through the copper conductor.",
-              "The circuit operates at a voltage of 230 volts.",
-              "High resistance reduces current flow.",
-              "Plastic is an electrical insulator.",
-              "The device has a power rating of 2000 W.",
-              "The system draws 8.7 amps of current."
-            ].map((sentence, i) => (
-              <div key={i} className="bg-white p-3 rounded shadow-sm border border-emerald-100 text-slate-700 italic">
-                "{sentence}"
-              </div>
-            ))}
+        {/* Section 4: Vocabulary List */}
+        <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-slate-100 border-b border-slate-200 px-6 py-4">
+            <h2 className="text-xl font-bold text-slate-800">4. Vocabulary Reference</h2>
           </div>
-        </div>
+          <div className="p-0 overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider">
+                  <th className="p-4 border-b font-medium">Term</th>
+                  <th className="p-4 border-b font-medium">Definition</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                {[
+                  ['Electric current', 'Flow of electric charge'],
+                  ['Circuit', 'Path through which current flows'],
+                  ['Conductor (general)', 'Material that allows current flow'],
+                  ['Component', 'Device in a circuit'],
+                  ['Electron', 'Negatively charged particle'],
+                  ['Charge carrier', 'Particle carrying electric charge'],
+                  ['Voltage', 'Electrical force driving current'],
+                  ['Electromotive force', 'Another term for voltage'],
+                  ['Resistance', 'Opposition to current'],
+                  ['Ohm', 'Unit of resistance'],
+                  ['Conductor (material)', 'Low-resistance material'],
+                  ['Insulator', 'High-resistance material'],
+                  ['Electric shock', 'Harm from electric current'],
+                  ['Electrical power', 'Rate of energy use'],
+                  ['Watt', 'Unit of power']
+                ].map((row, index) => (
+                  <tr key={index} className="hover:bg-slate-50 transition">
+                    <td className="p-4 font-semibold text-slate-800">{row[0]}</td>
+                    <td className="p-4">{row[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-        {/* Exercises */}
-        <ExerciseSection />
+        {/* Section 5: Exercises */}
+        <section className="bg-slate-100 p-2 md:p-6 rounded-2xl">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-slate-800 text-center">5. Practice Exercises</h2>
+          </div>
+          <Exercises />
+        </section>
 
       </main>
-      
-      <footer className="bg-slate-900 text-slate-400 text-center py-8 mt-12 text-sm border-t border-slate-800">
-        <p>Interactive Academic Tool &copy; 2024. Concepts of Current, Voltage, and Resistance.</p>
-      </footer>
     </div>
   );
 }

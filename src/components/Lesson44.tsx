@@ -275,40 +275,17 @@ export default function App() {
             <Zap className="text-yellow-400" size={32} fill="currentColor" />
             <h1 className="text-3xl font-bold tracking-tight">Electrical Supply</h1>
           </div>
-          <p className="text-indigo-200 text-lg max-w-2xl">
-            Learn how electrical energy is supplied and distributed, focusing on DC/AC systems, power generation, and key engineering vocabulary.
-          </p>
+        
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto p-6 flex flex-col md:flex-row gap-8 mt-4">
         
-        {/* Navigation Sidebar */}
-        <aside className="w-full md:w-64 flex-shrink-0">
-          <nav className="flex flex-col gap-2 bg-white p-4 rounded-xl shadow-sm border border-slate-100 sticky top-6">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Course Modules</h3>
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === tab.id 
-                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' 
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
-                {tab.icon}
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </aside>
+   
 
         {/* Content Area */}
         <div className="flex-grow bg-white rounded-xl shadow-sm border border-slate-100 p-8 min-h-[600px]">
           
-          {/* 1. Overview Tab */}
-          {activeTab === 'overview' && (
             <div className="animate-fade-in">
               <h2 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">1. Overview</h2>
               <p className="text-slate-600 leading-relaxed mb-6 text-lg">
@@ -333,10 +310,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-          )}
-
-          {/* 2. DC & AC Tab */}
-          {activeTab === 'acdc' && (
             <div className="animate-fade-in">
               <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-2">
                 <Activity className="text-indigo-500" />
@@ -364,10 +337,6 @@ export default function App() {
                 "The system operates at a frequency of 50 Hz."
               ]} />
             </div>
-          )}
-
-          {/* 3. AC Generation Tab */}
-          {activeTab === 'generation' && (
             <div className="animate-fade-in">
               <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-2">
                 <Factory className="text-indigo-500" />
@@ -407,10 +376,6 @@ export default function App() {
                 "Homes receive electricity at low voltage."
               ]} />
             </div>
-          )}
-
-          {/* 4. DC & Solar Tab */}
-          {activeTab === 'solar' && (
             <div className="animate-fade-in">
               <h2 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-2">
                 <Sun className="text-indigo-500" />
@@ -433,18 +398,12 @@ export default function App() {
                 "Solar panels generate DC, which is converted using an inverter."
               ]} />
             </div>
-          )}
-
-          {/* 5. Exercises Tab */}
-          {activeTab === 'exercises' && <ExercisesSection />}
+ <ExercisesSection />
 
         </div>
       </main>
       
-      {/* Footer */}
-      <footer className="text-center py-8 text-slate-500 text-sm">
-        <p>Engineering Vocabulary Lesson Module • Built for Educational Purposes</p>
-      </footer>
+      
       
       {/* Minimal custom CSS for fade-in animation since we don't have access to tailwind config */}
       <style dangerouslySetInnerHTML={{__html: `
